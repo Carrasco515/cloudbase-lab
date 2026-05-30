@@ -79,35 +79,50 @@ docker compose restart nextcloud
 
 ---
 
-## Backup-Idee
+## Backup
+
+Das Projekt enthaelt ein fertiges Backup-Script unter `scripts/backup.sh`.
+
+### Backup erstellen
+
+```bash
+# Ausfuehrbares Recht setzen (einmalig)
+chmod +x scripts/backup.sh
+
+# Standard-Backup (ohne .env)
+./scripts/backup.sh
+
+# Backup inkl. .env (enthaelt echte Passwoerter — sicher aufbewahren!)
+./scripts/backup.sh --include-env
+```
+
+Das Script erstellt automatisch einen Unterordner mit Timestamp:
+
+```
+backups/
+└── 2026-05-30_14-30-00/
+    ├── mariadb_dump.sql.gz       ← Datenbank-Dump (komprimiert)
+    ├── nextcloud_data.tar.gz     ← Nextcloud Volume-Archiv
+    └── project-files/            ← Wichtige Projektdateien
+```
+
+### Was wird gesichert?
+
+| Datei | Inhalt |
+|---|---|
+| `mariadb_dump.sql.gz` | Vollstaendiger MariaDB-Dump aller Datenbanken |
+| `nextcloud_data.tar.gz` | Nextcloud Volume (Dateien, Konfiguration, Apps) |
+| `project-files/` | docker-compose.yml, .env.example, README.md, homepage/ |
+
+### Wiederherstellung
+
+Siehe `scripts/restore-notes.md` fuer eine ausfuehrliche Schritt-fuer-Schritt Anleitung.
+
+### Hinweis zu Volumes
 
 Die wichtigen Daten liegen in zwei benannten Docker Volumes:
 - `cloudbase_nextcloud_data` — Nextcloud-Dateien und Konfiguration
-- `cloudbase_mariadb_data`   — Datenbankdaten
-
-### Einfaches Volume-Backup
-
-```bash
-# Nextcloud-Daten sichern
-docker run --rm \
-  -v cloudbase_nextcloud_data:/data:ro \
-  -v $(pwd)/backups:/backup \
-  alpine tar czf /backup/nextcloud_$(date +%Y%m%d).tar.gz /data
-
-# MariaDB-Daten sichern
-docker run --rm \
-  -v cloudbase_mariadb_data:/data:ro \
-  -v $(pwd)/backups:/backup \
-  alpine tar czf /backup/mariadb_$(date +%Y%m%d).tar.gz /data
-```
-
-### Datenbank-Dump (empfohlen)
-
-```bash
-docker exec cloudbase-mariadb \
-  mysqldump -u root -p"${DB_ROOT_PASSWORD}" --all-databases \
-  > backups/db_dump_$(date +%Y%m%d).sql
-```
+- `cloudbase_mariadb_data`   — Datenbankdaten (via Dump gesichert)
 
 ---
 

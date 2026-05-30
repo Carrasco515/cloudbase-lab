@@ -1,6 +1,9 @@
 # Secrets
 .env
 
+# Backups (koennen Passwoerter enthalten)
+backups/
+
 # Docker volumes (falls bind-mounts genutzt werden)
 data/
 
