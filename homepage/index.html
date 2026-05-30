@@ -18,8 +18,10 @@
       --text:       #e2e8f0;
       --text-muted: #94a3b8;
       --green:      #22c55e;
+      --blue:       #38bdf8;
       --yellow:     #eab308;
       --red:        #ef4444;
+      --orange:     #fb923c;
     }
 
     html { scroll-behavior: smooth; }
@@ -32,7 +34,6 @@
       overflow-x: hidden;
     }
 
-    /* ---- Background grid ---- */
     body::before {
       content: '';
       position: fixed;
@@ -45,224 +46,360 @@
       z-index: 0;
     }
 
-    .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .page { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
 
-    /* ---- Header ---- */
+    /* ======== HEADER ======== */
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.5rem 0 3rem;
+      padding: 1.5rem 0 2.5rem;
       border-bottom: 1px solid var(--border);
       margin-bottom: 3rem;
       gap: 1rem;
       flex-wrap: wrap;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-    }
+    .logo { display: flex; align-items: center; gap: .8rem; }
 
     .logo-icon {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 1.4rem;
       box-shadow: 0 0 20px rgba(99,102,241,.4);
+      flex-shrink: 0;
     }
 
     .logo h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
+      font-size: 1.4rem; font-weight: 700;
       background: linear-gradient(90deg, var(--accent-1), var(--accent-3));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -.02em;
     }
 
     .logo span { font-size: .75rem; color: var(--text-muted); display: block; font-weight: 400; letter-spacing: .05em; }
 
-    .header-time {
-      font-size: .85rem;
-      color: var(--text-muted);
-      text-align: right;
-    }
+    .header-right { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; justify-content: flex-end; }
 
+    .header-time { font-size: .85rem; color: var(--text-muted); text-align: right; }
     #clock { font-size: 1.2rem; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
 
-    /* ---- Hero ---- */
-    .hero { text-align: center; margin-bottom: 3.5rem; }
+    .system-badge {
+      display: flex; align-items: center; gap: .4rem;
+      background: rgba(34,197,94,.1);
+      border: 1px solid rgba(34,197,94,.25);
+      border-radius: 99px;
+      padding: .3rem .8rem;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .pulse {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(34,197,94,.6);
+      animation: pulse 2s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.6); }
+      70%  { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+
+    /* ======== HERO ======== */
+    .hero { text-align: center; margin-bottom: 3rem; }
 
     .hero h2 {
       font-size: clamp(1.8rem, 5vw, 2.8rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: .75rem;
+      font-weight: 800; line-height: 1.15; margin-bottom: .75rem;
     }
 
     .hero h2 span {
       background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 480px; margin: 0 auto; }
 
-    /* ---- Section title ---- */
-    .section-title {
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
+    /* ======== SECTION LABEL ======== */
+    .section-label {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
-    /* ---- Service cards grid ---- */
-    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.2rem; margin-bottom: 3rem; }
+    .section-label::after {
+      content: ''; flex: 1;
+      height: 1px; background: var(--border);
+    }
 
-    .card {
+    /* ======== PROJECT OVERVIEW STATS ======== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.4rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
-      display: flex;
-      flex-direction: column;
-      gap: .7rem;
+      border-radius: 14px;
+      padding: 1.1rem 1.3rem;
+      display: flex; align-items: center; gap: 1rem;
+      transition: border-color .2s, background .2s;
     }
 
-    .card:hover {
+    .stat-card:hover { background: var(--bg-card-h); border-color: var(--accent-1); }
+
+    .stat-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+
+    .stat-icon.indigo  { background: rgba(99,102,241,.15); }
+    .stat-icon.cyan    { background: rgba(6,182,212,.15); }
+    .stat-icon.orange  { background: rgba(249,115,22,.15); }
+    .stat-icon.violet  { background: rgba(139,92,246,.15); }
+
+    .stat-text {}
+    .stat-value { font-size: .95rem; font-weight: 700; color: var(--text); }
+    .stat-label { font-size: .72rem; color: var(--text-muted); margin-top: .1rem; }
+
+    /* ======== STATUS BADGE ======== */
+    .badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 99px;
+    }
+
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+    .badge-online {
+      background: rgba(34,197,94,.12);
+      color: var(--green);
+      border: 1px solid rgba(34,197,94,.25);
+    }
+    .badge-online .badge-dot { background: var(--green); box-shadow: 0 0 4px var(--green); }
+
+    .badge-intern {
+      background: rgba(56,189,248,.1);
+      color: var(--blue);
+      border: 1px solid rgba(56,189,248,.2);
+    }
+    .badge-intern .badge-dot { background: var(--blue); }
+
+    .badge-protected {
+      background: rgba(234,179,8,.1);
+      color: var(--yellow);
+      border: 1px solid rgba(234,179,8,.2);
+    }
+    .badge-protected .badge-dot { background: var(--yellow); }
+
+    /* ======== SERVICE STATUS CARDS ======== */
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
+
+    .svc-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.5rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .svc-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .svc-card:hover {
       background: var(--bg-card-h);
       border-color: var(--accent-1);
       transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(99,102,241,.2);
+      box-shadow: 0 12px 35px rgba(0,0,0,.35);
     }
 
-    .card-top { display: flex; align-items: center; justify-content: space-between; }
+    .svc-card:hover::before { opacity: 1; }
 
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
+    .svc-card.nc::before  { background: linear-gradient(90deg, #0082c9, #38bdf8); }
+    .svc-card.adm::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+    .svc-card.mdb::before { background: linear-gradient(90deg, #ea580c, #fb923c); }
+    .svc-card.rds::before { background: linear-gradient(90deg, #dc2626, #fca5a5); }
+
+    .svc-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+
+    .svc-icon-wrap { display: flex; align-items: center; gap: .75rem; }
+
+    .svc-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+
+    .svc-icon.nc  { background: rgba(0,130,201,.15); }
+    .svc-icon.adm { background: rgba(239,68,68,.15); }
+    .svc-icon.mdb { background: rgba(234,88,12,.15); }
+    .svc-icon.rds { background: rgba(220,38,38,.12); }
+
+    .svc-name { font-size: 1rem; font-weight: 700; }
+    .svc-type { font-size: .72rem; color: var(--text-muted); margin-top: .1rem; }
+
+    .svc-desc { font-size: .82rem; color: var(--text-muted); line-height: 1.55; }
+
+    .svc-meta {
+      display: flex; flex-wrap: wrap; gap: .5rem;
       align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--text-muted);
-    }
-    .status-dot.online  { background: var(--green);  box-shadow: 0 0 6px var(--green); }
-    .status-dot.warning { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
-
-    .card h3 { font-size: .95rem; font-weight: 700; }
-    .card p  { font-size: .8rem; color: var(--text-muted); line-height: 1.45; }
-
-    .card-tag {
-      font-size: .65rem;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: .2rem .55rem;
-      border-radius: 99px;
-      align-self: flex-start;
+    .meta-chip {
+      font-size: .68rem; font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 6px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
     }
 
-    /* ---- Individual card colours ---- */
-    .card-nextcloud  .card-icon { background: rgba(0,130,201,.15); }
-    .card-adminer    .card-icon { background: rgba(239,68,68,.15); }
-    .card-mariadb    .card-icon { background: rgba(249,115,22,.15); }
-    .card-redis      .card-icon { background: rgba(239,68,68,.12); }
-    .card-homepage   .card-icon { background: rgba(99,102,241,.15); }
+    .svc-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: .5rem; flex-wrap: wrap;
+      padding-top: .75rem;
+      border-top: 1px solid var(--border);
+    }
 
-    .card-nextcloud  .card-tag { background: rgba(0,130,201,.15);  color: #38bdf8; }
-    .card-adminer    .card-tag { background: rgba(239,68,68,.12);  color: #f87171; }
-    .card-mariadb    .card-tag { background: rgba(249,115,22,.12); color: #fb923c; }
-    .card-redis      .card-tag { background: rgba(239,68,68,.1);   color: #fca5a5; }
-    .card-homepage   .card-tag { background: rgba(99,102,241,.15); color: #a5b4fc; }
+    .svc-port {
+      font-size: .75rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: .35rem;
+    }
 
-    /* ---- Buttons row ---- */
+    .svc-port code {
+      font-size: .75rem;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      padding: .1rem .45rem; border-radius: 5px;
+      color: var(--text);
+      font-family: 'Consolas', 'Fira Code', monospace;
+    }
+
+    .btn-open {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .45rem 1rem;
+      border-radius: 8px;
+      font-size: .78rem; font-weight: 600;
+      text-decoration: none;
+      transition: opacity .15s, transform .15s, box-shadow .15s;
+      flex-shrink: 0;
+    }
+
+    .btn-open:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.3); }
+
+    .btn-open.nc  { background: linear-gradient(135deg, #0369a1, #0ea5e9); color: #fff; }
+    .btn-open.adm { background: linear-gradient(135deg, #b91c1c, #ef4444); color: #fff; }
+
+    .btn-intern {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .4rem .9rem;
+      border-radius: 8px;
+      font-size: .76rem; font-weight: 600;
+      background: rgba(56,189,248,.08);
+      border: 1px solid rgba(56,189,248,.2);
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+
+    /* ======== QUICK ACCESS ======== */
     .actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: 3rem; }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
+      display: inline-flex; align-items: center; gap: .5rem;
       padding: .65rem 1.3rem;
       border-radius: 10px;
-      font-size: .875rem;
-      font-weight: 600;
+      font-size: .875rem; font-weight: 600;
       text-decoration: none;
       transition: opacity .2s, transform .2s, box-shadow .2s;
-      cursor: pointer;
-      border: none;
+      cursor: pointer; border: none;
     }
 
     .btn:hover { opacity: .9; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.3); }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-      color: #fff;
+    .btn-primary { background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); color: #fff; }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-cyan { background: linear-gradient(135deg, #0891b2, #06b6d4); color: #fff; }
+
+    /* ======== SYSTEM OVERVIEW TABLE ======== */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .8rem;
+      margin-bottom: 3rem;
     }
 
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .btn-cyan {
-      background: linear-gradient(135deg, #0891b2, #06b6d4);
-      color: #fff;
-    }
-
-    /* ---- Info bar ---- */
-    .info-bar {
+    .ov-row {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1rem 1.4rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      font-size: .8rem;
-      color: var(--text-muted);
+      padding: .9rem 1.1rem;
+      display: flex; flex-direction: column; gap: .3rem;
+      transition: border-color .2s;
     }
 
-    .info-item { display: flex; align-items: center; gap: .4rem; }
-    .info-item strong { color: var(--text); }
+    .ov-row:hover { border-color: var(--accent-1); }
 
-    /* ---- Footer ---- */
+    .ov-service { font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--text-muted); }
+    .ov-value   { font-size: .95rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+    .ov-note    { font-size: .68rem; color: var(--text-muted); }
+
+    /* ======== FOOTER ======== */
     footer {
       margin-top: 4rem;
       padding-top: 1.5rem;
       border-top: 1px solid var(--border);
-      font-size: .75rem;
-      color: var(--text-muted);
-      text-align: center;
+      font-size: .75rem; color: var(--text-muted);
+      display: flex; flex-wrap: wrap; justify-content: space-between;
+      align-items: center; gap: .5rem;
     }
 
     footer a { color: var(--accent-3); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ======== RESPONSIVE ======== */
+    @media (max-width: 600px) {
+      .service-grid { grid-template-columns: 1fr; }
+      .stats-grid   { grid-template-columns: 1fr 1fr; }
+      .overview-grid { grid-template-columns: 1fr 1fr; }
+      .hero h2 { font-size: 1.7rem; }
+      .header-right { gap: .8rem; }
+    }
   </style>
 </head>
 <body>
 <div class="page">
 
+  <!-- ===== HEADER ===== -->
   <header>
     <div class="logo">
       <div class="logo-icon">&#9729;</div>
@@ -271,73 +408,165 @@
         <span>Homelab Infrastructure</span>
       </div>
     </div>
-    <div class="header-time">
-      <div id="clock">00:00:00</div>
-      <div id="date"></div>
+    <div class="header-right">
+      <div class="system-badge">
+        <div class="pulse"></div>
+        System Online
+      </div>
+      <div class="header-time">
+        <div id="clock">00:00:00</div>
+        <div id="date"></div>
+      </div>
     </div>
   </header>
 
+  <!-- ===== HERO ===== -->
   <section class="hero">
     <h2>Willkommen in deinem<br><span>lokalen Homelab</span></h2>
     <p>Alle Services auf einen Blick &mdash; sicher, lokal und unter deiner Kontrolle.</p>
   </section>
 
-  <p class="section-title">Services</p>
-  <div class="cards">
-
-    <a class="card card-nextcloud" href="http://localhost:8081" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-icon">&#9729;</div>
-        <div class="status-dot online"></div>
+  <!-- ===== PROJECT OVERVIEW ===== -->
+  <p class="section-label">Projekt&#252;bersicht</p>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon indigo">&#127381;</div>
+      <div class="stat-text">
+        <div class="stat-value">Docker Compose</div>
+        <div class="stat-label">Orchestrierung aktiv</div>
       </div>
-      <h3>Nextcloud</h3>
-      <p>Eigene Cloud-Speicher&shy;l&ouml;sung &mdash; Dateien, Kalender, Kontakte.</p>
-      <span class="card-tag">:8081</span>
-    </a>
-
-    <a class="card card-adminer" href="http://localhost:8082" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-icon">&#128196;</div>
-        <div class="status-dot online"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon cyan">&#9729;</div>
+      <div class="stat-text">
+        <div class="stat-value">Private Cloud</div>
+        <div class="stat-label">Nextcloud 29</div>
       </div>
-      <h3>Adminer</h3>
-      <p>Datenbank-Verwaltung &mdash; MariaDB via Web-Interface.</p>
-      <span class="card-tag">:8082</span>
-    </a>
-
-    <div class="card card-mariadb">
-      <div class="card-top">
-        <div class="card-icon">&#128024;</div>
-        <div class="status-dot online"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange">&#128024;</div>
+      <div class="stat-text">
+        <div class="stat-value">Datenbank Layer</div>
+        <div class="stat-label">MariaDB LTS</div>
       </div>
-      <h3>MariaDB</h3>
-      <p>Relationale Datenbank. Intern erreichbar via <code style="font-size:.75rem;color:#fb923c">mariadb:3306</code>.</p>
-      <span class="card-tag">intern</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon violet">&#9889;</div>
+      <div class="stat-text">
+        <div class="stat-value">Cache Layer</div>
+        <div class="stat-label">Redis Alpine</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SERVICE STATUS CARDS ===== -->
+  <p class="section-label">Service Status</p>
+  <div class="service-grid">
+
+    <!-- Nextcloud -->
+    <div class="svc-card nc">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon nc">&#9729;</div>
+          <div>
+            <div class="svc-name">Nextcloud</div>
+            <div class="svc-type">File &amp; Cloud Storage</div>
+          </div>
+        </div>
+        <span class="badge badge-online"><span class="badge-dot"></span>Online</span>
+      </div>
+      <p class="svc-desc">Eigene Cloud-L&ouml;sung f&uuml;r Dateien, Fotos, Kalender und Kontakte. Vollst&auml;ndig selbst gehostet.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">Nextcloud 29</span>
+        <span class="meta-chip">PHP 8.x</span>
+        <span class="meta-chip">Redis Cache</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Port <code>8081</code></div>
+        <a class="btn-open nc" href="http://localhost:8081" target="_blank" rel="noopener">
+          &#8599; &Ouml;ffnen
+        </a>
+      </div>
     </div>
 
-    <div class="card card-redis">
-      <div class="card-top">
-        <div class="card-icon">&#9889;</div>
-        <div class="status-dot online"></div>
+    <!-- Adminer -->
+    <div class="svc-card adm">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon adm">&#128196;</div>
+          <div>
+            <div class="svc-name">Adminer</div>
+            <div class="svc-type">Database Management UI</div>
+          </div>
+        </div>
+        <span class="badge badge-protected"><span class="badge-dot"></span>Gesch&uuml;tzt</span>
       </div>
-      <h3>Redis</h3>
-      <p>In-Memory Cache &mdash; beschleunigt Nextcloud-Sessions &amp; Uploads.</p>
-      <span class="card-tag">intern</span>
+      <p class="svc-desc">Web-Interface zur Verwaltung von MariaDB. Tabellen, Abfragen und Benutzer direkt im Browser.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">Adminer</span>
+        <span class="meta-chip">Dracula Theme</span>
+        <span class="meta-chip">MariaDB</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Port <code>8082</code></div>
+        <a class="btn-open adm" href="http://localhost:8082" target="_blank" rel="noopener">
+          &#8599; &Ouml;ffnen
+        </a>
+      </div>
     </div>
 
-    <div class="card card-homepage">
-      <div class="card-top">
-        <div class="card-icon">&#127968;</div>
-        <div class="status-dot online"></div>
+    <!-- MariaDB -->
+    <div class="svc-card mdb">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon mdb">&#128024;</div>
+          <div>
+            <div class="svc-name">MariaDB</div>
+            <div class="svc-type">Relational Database</div>
+          </div>
+        </div>
+        <span class="badge badge-intern"><span class="badge-dot"></span>Intern</span>
       </div>
-      <h3>Homepage</h3>
-      <p>Dieses Dashboard &mdash; serviert via nginx.</p>
-      <span class="card-tag">:8080</span>
+      <p class="svc-desc">Relationale Datenbank f&uuml;r Nextcloud. Intern erreichbar &uuml;ber den Docker-Netzwerkdienst.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">MariaDB LTS</span>
+        <span class="meta-chip">InnoDB</span>
+        <span class="meta-chip">Health Check</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Host <code>mariadb:3306</code></div>
+        <span class="btn-intern">&#128274; Interner Service</span>
+      </div>
+    </div>
+
+    <!-- Redis -->
+    <div class="svc-card rds">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon rds">&#9889;</div>
+          <div>
+            <div class="svc-name">Redis</div>
+            <div class="svc-type">In-Memory Cache</div>
+          </div>
+        </div>
+        <span class="badge badge-intern"><span class="badge-dot"></span>Intern</span>
+      </div>
+      <p class="svc-desc">Hochperformanter Cache f&uuml;r Nextcloud-Sessions, Datei-Locks und Upload-Beschleunigung.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">Redis Alpine</span>
+        <span class="meta-chip">Session Cache</span>
+        <span class="meta-chip">File Locking</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Host <code>redis:6379</code></div>
+        <span class="btn-intern">&#128274; Interner Service</span>
+      </div>
     </div>
 
   </div>
 
-  <p class="section-title">Schnellzugriff</p>
+  <!-- ===== QUICK ACCESS ===== -->
+  <p class="section-label">Schnellzugriff</p>
   <div class="actions">
     <a class="btn btn-primary" href="http://localhost:8081" target="_blank" rel="noopener">
       &#9729; Nextcloud &ouml;ffnen
@@ -350,19 +579,50 @@
     </a>
   </div>
 
-  <div class="info-bar">
-    <div class="info-item">&#128279; <strong>Stack:</strong> Docker Compose</div>
-    <div class="info-item">&#128190; <strong>DB:</strong> MariaDB LTS</div>
-    <div class="info-item">&#9889; <strong>Cache:</strong> Redis Alpine</div>
-    <div class="info-item">&#127758; <strong>Cloud:</strong> Nextcloud 29</div>
-    <div class="info-item">&#128394; <strong>Admin:</strong> Adminer (Dracula)</div>
+  <!-- ===== SYSTEM OVERVIEW ===== -->
+  <p class="section-label">System Overview</p>
+  <div class="overview-grid">
+    <div class="ov-row">
+      <div class="ov-service">Homepage</div>
+      <div class="ov-value">:8080</div>
+      <div class="ov-note">nginx &middot; Static</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Nextcloud</div>
+      <div class="ov-value">:8081</div>
+      <div class="ov-note">PHP &middot; Apache</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Adminer</div>
+      <div class="ov-value">:8082</div>
+      <div class="ov-note">PHP &middot; Web UI</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">MariaDB</div>
+      <div class="ov-value">Intern</div>
+      <div class="ov-note">mariadb:3306</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Redis</div>
+      <div class="ov-value">Intern</div>
+      <div class="ov-note">redis:6379</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Netzwerk</div>
+      <div class="ov-value">Bridge</div>
+      <div class="ov-note">cloudbase_network</div>
+    </div>
   </div>
 
+  <!-- ===== FOOTER ===== -->
   <footer>
-    CloudBase Lab &mdash; Homelab Project &bull;
-    <a href="https://nextcloud.com" target="_blank" rel="noopener">Nextcloud</a> &bull;
-    <a href="https://adminer.org" target="_blank" rel="noopener">Adminer</a> &bull;
-    <a href="https://mariadb.org" target="_blank" rel="noopener">MariaDB</a>
+    <span>CloudBase Lab &mdash; Homelab Project &mdash; 2024</span>
+    <span>
+      <a href="https://nextcloud.com" target="_blank" rel="noopener">Nextcloud</a> &bull;
+      <a href="https://adminer.org" target="_blank" rel="noopener">Adminer</a> &bull;
+      <a href="https://mariadb.org" target="_blank" rel="noopener">MariaDB</a> &bull;
+      <a href="https://redis.io" target="_blank" rel="noopener">Redis</a>
+    </span>
   </footer>
 
 </div>
