@@ -1,0 +1,9 @@
+# Secrets
+.env
+
+# Docker volumes (falls bind-mounts genutzt werden)
+data/
+
+# Betriebssystem
+.DS_Store
+Thumbs.db

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CloudBase Lab</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-base:    #0d0d1a;
+      --bg-card:    #13132a;
+      --bg-card-h:  #1a1a35;
+      --border:     #2a2a50;
+      --accent-1:   #6366f1;
+      --accent-2:   #8b5cf6;
+      --accent-3:   #06b6d4;
+      --text:       #e2e8f0;
+      --text-muted: #94a3b8;
+      --green:      #22c55e;
+      --yellow:     #eab308;
+      --red:        #ef4444;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ---- Background grid ---- */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,102,241,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* ---- Header ---- */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 20px rgba(99,102,241,.4);
+    }
+
+    .logo h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -.02em;
+    }
+
+    .logo span { font-size: .75rem; color: var(--text-muted); display: block; font-weight: 400; letter-spacing: .05em; }
+
+    .header-time {
+      font-size: .85rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    #clock { font-size: 1.2rem; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+    /* ---- Hero ---- */
+    .hero { text-align: center; margin-bottom: 3.5rem; }
+
+    .hero h2 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: .75rem;
+    }
+
+    .hero h2 span {
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 480px; margin: 0 auto; }
+
+    /* ---- Section title ---- */
+    .section-title {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    /* ---- Service cards grid ---- */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.2rem; margin-bottom: 3rem; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+    }
+
+    .card:hover {
+      background: var(--bg-card-h);
+      border-color: var(--accent-1);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(99,102,241,.2);
+    }
+
+    .card-top { display: flex; align-items: center; justify-content: space-between; }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+    .status-dot.online  { background: var(--green);  box-shadow: 0 0 6px var(--green); }
+    .status-dot.warning { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+
+    .card h3 { font-size: .95rem; font-weight: 700; }
+    .card p  { font-size: .8rem; color: var(--text-muted); line-height: 1.45; }
+
+    .card-tag {
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .2rem .55rem;
+      border-radius: 99px;
+      align-self: flex-start;
+    }
+
+    /* ---- Individual card colours ---- */
+    .card-nextcloud  .card-icon { background: rgba(0,130,201,.15); }
+    .card-adminer    .card-icon { background: rgba(239,68,68,.15); }
+    .card-mariadb    .card-icon { background: rgba(249,115,22,.15); }
+    .card-redis      .card-icon { background: rgba(239,68,68,.12); }
+    .card-homepage   .card-icon { background: rgba(99,102,241,.15); }
+
+    .card-nextcloud  .card-tag { background: rgba(0,130,201,.15);  color: #38bdf8; }
+    .card-adminer    .card-tag { background: rgba(239,68,68,.12);  color: #f87171; }
+    .card-mariadb    .card-tag { background: rgba(249,115,22,.12); color: #fb923c; }
+    .card-redis      .card-tag { background: rgba(239,68,68,.1);   color: #fca5a5; }
+    .card-homepage   .card-tag { background: rgba(99,102,241,.15); color: #a5b4fc; }
+
+    /* ---- Buttons row ---- */
+    .actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: 3rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .65rem 1.3rem;
+      border-radius: 10px;
+      font-size: .875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity .2s, transform .2s, box-shadow .2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn:hover { opacity: .9; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-cyan {
+      background: linear-gradient(135deg, #0891b2, #06b6d4);
+      color: #fff;
+    }
+
+    /* ---- Info bar ---- */
+    .info-bar {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    .info-item { display: flex; align-items: center; gap: .4rem; }
+    .info-item strong { color: var(--text); }
+
+    /* ---- Footer ---- */
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: .75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    footer a { color: var(--accent-3); text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="logo">
+      <div class="logo-icon">&#9729;</div>
+      <div>
+        <h1>CloudBase Lab</h1>
+        <span>Homelab Infrastructure</span>
+      </div>
+    </div>
+    <div class="header-time">
+      <div id="clock">00:00:00</div>
+      <div id="date"></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h2>Willkommen in deinem<br><span>lokalen Homelab</span></h2>
+    <p>Alle Services auf einen Blick &mdash; sicher, lokal und unter deiner Kontrolle.</p>
+  </section>
+
+  <p class="section-title">Services</p>
+  <div class="cards">
+
+    <a class="card card-nextcloud" href="http://localhost:8081" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-icon">&#9729;</div>
+        <div class="status-dot online"></div>
+      </div>
+      <h3>Nextcloud</h3>
+      <p>Eigene Cloud-Speicher&shy;l&ouml;sung &mdash; Dateien, Kalender, Kontakte.</p>
+      <span class="card-tag">:8081</span>
+    </a>
+
+    <a class="card card-adminer" href="http://localhost:8082" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-icon">&#128196;</div>
+        <div class="status-dot online"></div>
+      </div>
+      <h3>Adminer</h3>
+      <p>Datenbank-Verwaltung &mdash; MariaDB via Web-Interface.</p>
+      <span class="card-tag">:8082</span>
+    </a>
+
+    <div class="card card-mariadb">
+      <div class="card-top">
+        <div class="card-icon">&#128024;</div>
+        <div class="status-dot online"></div>
+      </div>
+      <h3>MariaDB</h3>
+      <p>Relationale Datenbank. Intern erreichbar via <code style="font-size:.75rem;color:#fb923c">mariadb:3306</code>.</p>
+      <span class="card-tag">intern</span>
+    </div>
+
+    <div class="card card-redis">
+      <div class="card-top">
+        <div class="card-icon">&#9889;</div>
+        <div class="status-dot online"></div>
+      </div>
+      <h3>Redis</h3>
+      <p>In-Memory Cache &mdash; beschleunigt Nextcloud-Sessions &amp; Uploads.</p>
+      <span class="card-tag">intern</span>
+    </div>
+
+    <div class="card card-homepage">
+      <div class="card-top">
+        <div class="card-icon">&#127968;</div>
+        <div class="status-dot online"></div>
+      </div>
+      <h3>Homepage</h3>
+      <p>Dieses Dashboard &mdash; serviert via nginx.</p>
+      <span class="card-tag">:8080</span>
+    </div>
+
+  </div>
+
+  <p class="section-title">Schnellzugriff</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="http://localhost:8081" target="_blank" rel="noopener">
+      &#9729; Nextcloud &ouml;ffnen
+    </a>
+    <a class="btn btn-secondary" href="http://localhost:8082" target="_blank" rel="noopener">
+      &#128196; Adminer &ouml;ffnen
+    </a>
+    <a class="btn btn-cyan" href="http://localhost:8080" target="_blank" rel="noopener">
+      &#127968; Dashboard
+    </a>
+  </div>
+
+  <div class="info-bar">
+    <div class="info-item">&#128279; <strong>Stack:</strong> Docker Compose</div>
+    <div class="info-item">&#128190; <strong>DB:</strong> MariaDB LTS</div>
+    <div class="info-item">&#9889; <strong>Cache:</strong> Redis Alpine</div>
+    <div class="info-item">&#127758; <strong>Cloud:</strong> Nextcloud 29</div>
+    <div class="info-item">&#128394; <strong>Admin:</strong> Adminer (Dracula)</div>
+  </div>
+
+  <footer>
+    CloudBase Lab &mdash; Homelab Project &bull;
+    <a href="https://nextcloud.com" target="_blank" rel="noopener">Nextcloud</a> &bull;
+    <a href="https://adminer.org" target="_blank" rel="noopener">Adminer</a> &bull;
+    <a href="https://mariadb.org" target="_blank" rel="noopener">MariaDB</a>
+  </footer>
+
+</div>
+
+<script>
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+    document.getElementById('date').textContent =
+      now.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
