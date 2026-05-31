@@ -139,11 +139,14 @@ log_section "Nextcloud volume backup"
 log_info "Reading Docker volume: cloudbase_nextcloud_data ..."
 log_info "(This can take a few minutes for large amounts of data)"
 
+# The container runs as root to read all volume files; chown the
+# resulting archive back to the invoking user so it isn't root-owned.
 docker run --rm \
+  -e HOST_UID="$(id -u)" -e HOST_GID="$(id -g)" \
   -v cloudbase_nextcloud_data:/source:ro \
   -v "$BACKUP_DIR":/backup \
   alpine \
-  sh -c "cd /source && tar czf /backup/nextcloud_data.tar.gz . 2>/dev/null"
+  sh -c 'cd /source && tar czf /backup/nextcloud_data.tar.gz . 2>/dev/null && chown "$HOST_UID:$HOST_GID" /backup/nextcloud_data.tar.gz'
 
 NC_SIZE="$(du -sh "$BACKUP_DIR/nextcloud_data.tar.gz" | cut -f1)"
 log_ok "Nextcloud data saved: nextcloud_data.tar.gz  ($NC_SIZE)"
