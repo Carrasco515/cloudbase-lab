@@ -1,78 +1,78 @@
 # CloudBase Lab
 
-Ein lokales Homelab auf Basis von Docker Compose.
+A local homelab based on Docker Compose.
 
 ## Services
 
-| Service    | URL                       | Beschreibung               |
+| Service    | URL                       | Description                |
 |------------|---------------------------|----------------------------|
-| Homepage   | http://localhost:8080     | Startseite / Dashboard     |
-| Nextcloud  | http://localhost:8081     | Persoenliche Cloud         |
-| Adminer    | http://localhost:8082     | Datenbank-Verwaltung       |
-| MariaDB    | intern (Port 3306)        | Relationale Datenbank      |
-| Redis      | intern (Port 6379)        | In-Memory Cache            |
+| Homepage   | http://localhost:8080     | Landing page / dashboard   |
+| Nextcloud  | http://localhost:8081     | Personal cloud             |
+| Adminer    | http://localhost:8082     | Database management        |
+| MariaDB    | internal (port 3306)      | Relational database        |
+| Redis      | internal (port 6379)      | In-memory cache            |
 
 ---
 
-## Voraussetzungen
+## Requirements
 
 - [Docker](https://docs.docker.com/get-docker/) >= 24
-- [Docker Compose](https://docs.docker.com/compose/) >= 2.20 (integriert in Docker Desktop)
+- [Docker Compose](https://docs.docker.com/compose/) >= 2.20 (bundled with Docker Desktop)
 
 ---
 
-## Ersteinrichtung
+## Initial Setup
 
 ```bash
-# 1. .env Datei erstellen
+# 1. Create the .env file
 cp .env.example .env
 
-# 2. Passwörter in .env anpassen (WICHTIG!)
+# 2. Set passwords in .env (IMPORTANT!)
 nano .env
 
-# 3. Stack starten
+# 3. Start the stack
 docker compose up -d
 
-# 4. Logs verfolgen
+# 4. Follow the logs
 docker compose logs -f
 ```
 
 ---
 
-## Verwaltung
+## Management
 
-### Starten
+### Start
 ```bash
 docker compose up -d
 ```
 
-### Stoppen (Container bleiben erhalten)
+### Stop (containers are kept)
 ```bash
 docker compose stop
 ```
 
-### Stoppen und entfernen (Volumes bleiben erhalten)
+### Stop and remove (volumes are preserved)
 ```bash
 docker compose down
 ```
 
-### Logs anzeigen
+### View logs
 ```bash
-# Alle Services
+# All services
 docker compose logs -f
 
-# Einzelner Service
+# A single service
 docker compose logs -f nextcloud
 docker compose logs -f mariadb
 docker compose logs -f redis
 ```
 
-### Status pruefen
+### Check status
 ```bash
 docker compose ps
 ```
 
-### Container neustarten
+### Restart a container
 ```bash
 docker compose restart nextcloud
 ```
@@ -81,66 +81,66 @@ docker compose restart nextcloud
 
 ## Backup
 
-Das Projekt enthaelt ein fertiges Backup-Script unter `scripts/backup.sh`.
+The project includes a ready-to-use backup script at `scripts/backup.sh`.
 
-### Backup erstellen
+### Create a backup
 
 ```bash
-# Ausfuehrbares Recht setzen (einmalig)
+# Make it executable (one time)
 chmod +x scripts/backup.sh
 
-# Standard-Backup (ohne .env)
+# Standard backup (without .env)
 ./scripts/backup.sh
 
-# Backup inkl. .env (enthaelt echte Passwoerter — sicher aufbewahren!)
+# Backup including .env (contains real passwords — store securely!)
 ./scripts/backup.sh --include-env
 ```
 
-Das Script erstellt automatisch einen Unterordner mit Timestamp:
+The script automatically creates a timestamped subfolder:
 
 ```
 backups/
 └── 2026-05-30_14-30-00/
-    ├── mariadb_dump.sql.gz       ← Datenbank-Dump (komprimiert)
-    ├── nextcloud_data.tar.gz     ← Nextcloud Volume-Archiv
-    └── project-files/            ← Wichtige Projektdateien
+    ├── mariadb_dump.sql.gz       ← Database dump (compressed)
+    ├── nextcloud_data.tar.gz     ← Nextcloud volume archive
+    └── project-files/            ← Important project files
 ```
 
-### Was wird gesichert?
+### What gets backed up?
 
-| Datei | Inhalt |
+| File | Contents |
 |---|---|
-| `mariadb_dump.sql.gz` | Vollstaendiger MariaDB-Dump aller Datenbanken |
-| `nextcloud_data.tar.gz` | Nextcloud Volume (Dateien, Konfiguration, Apps) |
+| `mariadb_dump.sql.gz` | Full MariaDB dump of all databases |
+| `nextcloud_data.tar.gz` | Nextcloud volume (files, configuration, apps) |
 | `project-files/` | docker-compose.yml, .env.example, README.md, homepage/ |
 
-### Wiederherstellung
+### Restore
 
-Siehe `scripts/restore-notes.md` fuer eine ausfuehrliche Schritt-fuer-Schritt Anleitung.
+See `scripts/restore-notes.md` for a detailed step-by-step guide.
 
-### Hinweis zu Volumes
+### Note on volumes
 
-Die wichtigen Daten liegen in zwei benannten Docker Volumes:
-- `cloudbase_nextcloud_data` — Nextcloud-Dateien und Konfiguration
-- `cloudbase_mariadb_data`   — Datenbankdaten (via Dump gesichert)
-
----
-
-## Naechste Schritte
-
-- [ ] HTTPS via Traefik oder Caddy als Reverse Proxy einrichten
-- [ ] Nextcloud mit externem Speicher (NFS / SMB) verbinden
-- [ ] Automatisches Backup per Cronjob einrichten
-- [ ] Monitoring mit Uptime Kuma oder Grafana + Prometheus erganzen
-- [ ] Portainer fuer eine Docker-Web-GUI hinzufuegen
-- [ ] Vaultwarden als lokalen Passwort-Manager integrieren
-- [ ] Watchtower fuer automatische Image-Updates einrichten
+The important data lives in two named Docker volumes:
+- `cloudbase_nextcloud_data` — Nextcloud files and configuration
+- `cloudbase_mariadb_data`   — Database data (backed up via dump)
 
 ---
 
-## Sicherheitshinweise
+## Next Steps
 
-- `.env` niemals in Git einchecken (ist in `.gitignore` eingetragen)
-- Passwörter in `.env` vor dem ersten Start anpassen
-- Ports nur lokal binden (kein `0.0.0.0` ohne Firewall)
-- Fuer den Produktiveinsatz: Reverse Proxy mit TLS verwenden
+- [ ] Set up HTTPS via Traefik or Caddy as a reverse proxy
+- [ ] Connect Nextcloud to external storage (NFS / SMB)
+- [ ] Set up automatic backups via cron job
+- [ ] Add monitoring with Uptime Kuma or Grafana + Prometheus
+- [ ] Add Portainer for a Docker web GUI
+- [ ] Integrate Vaultwarden as a local password manager
+- [ ] Set up Watchtower for automatic image updates
+
+---
+
+## Security Notes
+
+- Never commit `.env` to Git (it is listed in `.gitignore`)
+- Set the passwords in `.env` before the first start
+- Bind ports locally only (no `0.0.0.0` without a firewall)
+- For production use: put a reverse proxy with TLS in front

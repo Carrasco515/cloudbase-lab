@@ -1,12 +1,12 @@
 # Secrets
 .env
 
-# Backups (koennen Passwoerter enthalten)
+# Backups (may contain passwords)
 backups/
 
-# Docker volumes (falls bind-mounts genutzt werden)
+# Docker volumes (if bind mounts are used)
 data/
 
-# Betriebssystem
+# Operating system
 .DS_Store
 Thumbs.db

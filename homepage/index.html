@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -422,18 +422,18 @@
 
   <!-- ===== HERO ===== -->
   <section class="hero">
-    <h2>Willkommen in deinem<br><span>lokalen Homelab</span></h2>
-    <p>Alle Services auf einen Blick &mdash; sicher, lokal und unter deiner Kontrolle.</p>
+    <h2>Welcome to your<br><span>local homelab</span></h2>
+    <p>All your services at a glance &mdash; secure, local and under your control.</p>
   </section>
 
   <!-- ===== PROJECT OVERVIEW ===== -->
-  <p class="section-label">Projekt&#252;bersicht</p>
+  <p class="section-label">Project Overview</p>
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-icon indigo">&#127381;</div>
       <div class="stat-text">
         <div class="stat-value">Docker Compose</div>
-        <div class="stat-label">Orchestrierung aktiv</div>
+        <div class="stat-label">Orchestration active</div>
       </div>
     </div>
     <div class="stat-card">
@@ -446,7 +446,7 @@
     <div class="stat-card">
       <div class="stat-icon orange">&#128024;</div>
       <div class="stat-text">
-        <div class="stat-value">Datenbank Layer</div>
+        <div class="stat-value">Database Layer</div>
         <div class="stat-label">MariaDB LTS</div>
       </div>
     </div>
@@ -475,7 +475,7 @@
         </div>
         <span class="badge badge-online"><span class="badge-dot"></span>Online</span>
       </div>
-      <p class="svc-desc">Eigene Cloud-L&ouml;sung f&uuml;r Dateien, Fotos, Kalender und Kontakte. Vollst&auml;ndig selbst gehostet.</p>
+      <p class="svc-desc">Your own cloud solution for files, photos, calendars and contacts. Fully self-hosted.</p>
       <div class="svc-meta">
         <span class="meta-chip">Nextcloud 29</span>
         <span class="meta-chip">PHP 8.x</span>
@@ -484,7 +484,7 @@
       <div class="svc-footer">
         <div class="svc-port">Port <code>8081</code></div>
         <a class="btn-open nc" href="http://localhost:8081" target="_blank" rel="noopener">
-          &#8599; &Ouml;ffnen
+          &#8599; Open
         </a>
       </div>
     </div>
@@ -499,9 +499,9 @@
             <div class="svc-type">Database Management UI</div>
           </div>
         </div>
-        <span class="badge badge-protected"><span class="badge-dot"></span>Gesch&uuml;tzt</span>
+        <span class="badge badge-protected"><span class="badge-dot"></span>Protected</span>
       </div>
-      <p class="svc-desc">Web-Interface zur Verwaltung von MariaDB. Tabellen, Abfragen und Benutzer direkt im Browser.</p>
+      <p class="svc-desc">Web interface for managing MariaDB. Tables, queries and users directly in the browser.</p>
       <div class="svc-meta">
         <span class="meta-chip">Adminer</span>
         <span class="meta-chip">Dracula Theme</span>
@@ -510,7 +510,7 @@
       <div class="svc-footer">
         <div class="svc-port">Port <code>8082</code></div>
         <a class="btn-open adm" href="http://localhost:8082" target="_blank" rel="noopener">
-          &#8599; &Ouml;ffnen
+          &#8599; Open
         </a>
       </div>
     </div>
@@ -525,9 +525,9 @@
             <div class="svc-type">Relational Database</div>
           </div>
         </div>
-        <span class="badge badge-intern"><span class="badge-dot"></span>Intern</span>
+        <span class="badge badge-intern"><span class="badge-dot"></span>Internal</span>
       </div>
-      <p class="svc-desc">Relationale Datenbank f&uuml;r Nextcloud. Intern erreichbar &uuml;ber den Docker-Netzwerkdienst.</p>
+      <p class="svc-desc">Relational database for Nextcloud. Reachable internally via the Docker network service.</p>
       <div class="svc-meta">
         <span class="meta-chip">MariaDB LTS</span>
         <span class="meta-chip">InnoDB</span>
@@ -535,7 +535,7 @@
       </div>
       <div class="svc-footer">
         <div class="svc-port">Host <code>mariadb:3306</code></div>
-        <span class="btn-intern">&#128274; Interner Service</span>
+        <span class="btn-intern">&#128274; Internal service</span>
       </div>
     </div>
 
@@ -549,9 +549,9 @@
             <div class="svc-type">In-Memory Cache</div>
           </div>
         </div>
-        <span class="badge badge-intern"><span class="badge-dot"></span>Intern</span>
+        <span class="badge badge-intern"><span class="badge-dot"></span>Internal</span>
       </div>
-      <p class="svc-desc">Hochperformanter Cache f&uuml;r Nextcloud-Sessions, Datei-Locks und Upload-Beschleunigung.</p>
+      <p class="svc-desc">High-performance cache for Nextcloud sessions, file locks and faster uploads.</p>
       <div class="svc-meta">
         <span class="meta-chip">Redis Alpine</span>
         <span class="meta-chip">Session Cache</span>
@@ -559,20 +559,20 @@
       </div>
       <div class="svc-footer">
         <div class="svc-port">Host <code>redis:6379</code></div>
-        <span class="btn-intern">&#128274; Interner Service</span>
+        <span class="btn-intern">&#128274; Internal service</span>
       </div>
     </div>
 
   </div>
 
   <!-- ===== QUICK ACCESS ===== -->
-  <p class="section-label">Schnellzugriff</p>
+  <p class="section-label">Quick Access</p>
   <div class="actions">
     <a class="btn btn-primary" href="http://localhost:8081" target="_blank" rel="noopener">
-      &#9729; Nextcloud &ouml;ffnen
+      &#9729; Open Nextcloud
     </a>
     <a class="btn btn-secondary" href="http://localhost:8082" target="_blank" rel="noopener">
-      &#128196; Adminer &ouml;ffnen
+      &#128196; Open Adminer
     </a>
     <a class="btn btn-cyan" href="http://localhost:8080" target="_blank" rel="noopener">
       &#127968; Dashboard
@@ -599,16 +599,16 @@
     </div>
     <div class="ov-row">
       <div class="ov-service">MariaDB</div>
-      <div class="ov-value">Intern</div>
+      <div class="ov-value">Internal</div>
       <div class="ov-note">mariadb:3306</div>
     </div>
     <div class="ov-row">
       <div class="ov-service">Redis</div>
-      <div class="ov-value">Intern</div>
+      <div class="ov-value">Internal</div>
       <div class="ov-note">redis:6379</div>
     </div>
     <div class="ov-row">
-      <div class="ov-service">Netzwerk</div>
+      <div class="ov-service">Network</div>
       <div class="ov-value">Bridge</div>
       <div class="ov-note">cloudbase_network</div>
     </div>
@@ -634,7 +634,7 @@
     document.getElementById('clock').textContent =
       pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
     document.getElementById('date').textContent =
-      now.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+      now.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
   }
   tick();
   setInterval(tick, 1000);
