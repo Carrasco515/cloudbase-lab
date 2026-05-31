@@ -4,14 +4,19 @@ A local homelab based on Docker Compose.
 
 ## Services
 
-| Service    | URL                       | Description                |
-|------------|---------------------------|----------------------------|
-| Homepage    | http://localhost:8080     | Landing page / dashboard   |
-| Nextcloud   | http://localhost:8081     | Personal cloud             |
-| Adminer     | http://localhost:8082     | Database management        |
-| Uptime Kuma | http://localhost:8083     | Monitoring / status pages  |
-| MariaDB     | internal (port 3306)      | Relational database        |
-| Redis       | internal (port 6379)      | In-memory cache            |
+| Service     | URL                       | Description                    |
+|-------------|---------------------------|--------------------------------|
+| Traefik     | http://localhost (80/443) | Reverse proxy / TLS / dashboard |
+| Homepage    | http://localhost:8080     | Landing page / dashboard       |
+| Nextcloud   | http://localhost:8081     | Personal cloud                 |
+| Adminer     | http://localhost:8082     | Database management            |
+| Uptime Kuma | http://localhost:8083     | Monitoring / status pages      |
+| MariaDB     | internal (port 3306)      | Relational database            |
+| Redis       | internal (port 6379)      | In-memory cache                |
+
+Each service is also reachable over HTTPS through Traefik at a local hostname
+(`*.cloudbase.local`) — see [Reverse proxy (Traefik)](#reverse-proxy-traefik).
+The direct `:808x` ports stay available for convenience.
 
 ---
 
@@ -77,6 +82,62 @@ docker compose ps
 ```bash
 docker compose restart nextcloud
 ```
+
+---
+
+## Reverse proxy (Traefik)
+
+[Traefik](https://traefik.io/traefik/) sits in front of the stack on ports
+**80** and **443**. It discovers services automatically through Docker labels
+and routes each one to a local hostname over HTTPS. Plain HTTP is redirected to
+HTTPS.
+
+| Hostname                    | Service     |
+|-----------------------------|-------------|
+| `homepage.cloudbase.local`  | Homepage    |
+| `nextcloud.cloudbase.local` | Nextcloud   |
+| `adminer.cloudbase.local`   | Adminer     |
+| `uptime.cloudbase.local`    | Uptime Kuma |
+| `traefik.cloudbase.local`   | Traefik dashboard |
+
+### 1. Map the hostnames to localhost
+
+The `*.cloudbase.local` names only need to resolve to `127.0.0.1`. Add them to
+your hosts file (`/etc/hosts` on Linux/macOS, `C:\Windows\System32\drivers\etc\hosts`
+on Windows):
+
+```
+127.0.0.1  homepage.cloudbase.local nextcloud.cloudbase.local adminer.cloudbase.local uptime.cloudbase.local traefik.cloudbase.local
+```
+
+### 2. Open a service
+
+Visit e.g. https://nextcloud.cloudbase.local. Because no real domain is
+configured yet, Traefik serves its **built-in self-signed certificate**, so the
+browser shows a "not secure / untrusted certificate" warning — that is expected
+for local development. Accept it to continue. The direct ports (e.g.
+http://localhost:8081) keep working without any certificate warning.
+
+### Notes
+
+- **Nothing is exposed to the internet.** Ports 80/443 bind to the local host
+  only, and the hostnames resolve to `127.0.0.1`.
+- **Let's Encrypt is intentionally not enabled.** A trusted certificate requires
+  a real, publicly resolvable domain. Once you have one, set `CLOUDBASE_DOMAIN`
+  to it and add a certificate resolver to the Traefik `command:` in
+  `docker-compose.yml` (an ACME/TLS-challenge block), then point the routers at
+  it. Until then the self-signed cert is the right choice.
+- Nextcloud is configured with `TRUSTED_PROXIES` (the pinned `CLOUDBASE_SUBNET`)
+  so it honours `X-Forwarded-Proto` and generates correct `https://` URLs behind
+  the proxy. For an **existing** install, also add the hostname to the trusted
+  domains once:
+  ```bash
+  docker compose exec --user www-data nextcloud \
+    php occ config:system:set trusted_domains 1 --value=nextcloud.cloudbase.local
+  ```
+- Traefik needs read-only access to the Docker socket for service discovery
+  (`/var/run/docker.sock:ro`). This is standard for the Docker provider; keep it
+  local-only.
 
 ---
 
@@ -201,7 +262,8 @@ it lives in the Docker volume).
 
 ## Next Steps
 
-- [ ] Set up HTTPS via Traefik or Caddy as a reverse proxy
+- [x] Set up a Traefik reverse proxy with HTTPS and local hostnames
+- [ ] Enable Let's Encrypt once a real public domain is available
 - [ ] Connect Nextcloud to external storage (NFS / SMB)
 - [x] Set up automatic backups (systemd timer, daily at 03:00, with retention)
 - [x] Add monitoring with Uptime Kuma

@@ -245,6 +245,7 @@
 
     .svc-card:hover::before { opacity: 1; }
 
+    .svc-card.tfk::before { background: linear-gradient(90deg, #0ea5e9, #22d3ee); }
     .svc-card.nc::before  { background: linear-gradient(90deg, #0082c9, #38bdf8); }
     .svc-card.adm::before { background: linear-gradient(90deg, #ef4444, #f87171); }
     .svc-card.uk::before  { background: linear-gradient(90deg, #16a34a, #4ade80); }
@@ -261,6 +262,7 @@
       font-size: 1.4rem; flex-shrink: 0;
     }
 
+    .svc-icon.tfk { background: rgba(14,165,233,.15); }
     .svc-icon.nc  { background: rgba(0,130,201,.15); }
     .svc-icon.adm { background: rgba(239,68,68,.15); }
     .svc-icon.uk  { background: rgba(22,163,74,.15); }
@@ -323,6 +325,7 @@
     .btn-open.nc  { background: linear-gradient(135deg, #0369a1, #0ea5e9); color: #fff; }
     .btn-open.adm { background: linear-gradient(135deg, #b91c1c, #ef4444); color: #fff; }
     .btn-open.uk  { background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; }
+    .btn-open.tfk { background: linear-gradient(135deg, #0284c7, #06b6d4); color: #fff; }
 
     .btn-intern {
       display: inline-flex; align-items: center; gap: .4rem;
@@ -473,6 +476,32 @@
   <!-- ===== SERVICE STATUS CARDS ===== -->
   <p class="section-label">Service Status</p>
   <div class="service-grid">
+
+    <!-- Traefik -->
+    <div class="svc-card tfk">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon tfk">&#128737;</div>
+          <div>
+            <div class="svc-name">Traefik</div>
+            <div class="svc-type">Reverse Proxy &amp; TLS</div>
+          </div>
+        </div>
+        <span class="badge badge-online"><span class="badge-dot"></span>Online</span>
+      </div>
+      <p class="svc-desc">Edge router for the whole stack. Routes local hostnames over HTTPS and redirects plain HTTP to TLS.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">Traefik v3</span>
+        <span class="meta-chip">HTTP :80</span>
+        <span class="meta-chip">HTTPS :443</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Host <code>traefik.cloudbase.local</code></div>
+        <a class="btn-open tfk" href="https://traefik.cloudbase.local/dashboard/" target="_blank" rel="noopener">
+          &#8599; Dashboard
+        </a>
+      </div>
+    </div>
 
     <!-- Nextcloud -->
     <div class="svc-card nc">
@@ -656,6 +685,36 @@
       <div class="ov-service">Network</div>
       <div class="ov-value">Bridge</div>
       <div class="ov-note">cloudbase_network</div>
+    </div>
+  </div>
+
+  <!-- ===== REVERSE PROXY ROUTES ===== -->
+  <p class="section-label">Reverse Proxy &middot; Local Hostnames (HTTPS)</p>
+  <div class="overview-grid">
+    <div class="ov-row">
+      <div class="ov-service">Homepage</div>
+      <div class="ov-value">https://</div>
+      <div class="ov-note">homepage.cloudbase.local</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Nextcloud</div>
+      <div class="ov-value">https://</div>
+      <div class="ov-note">nextcloud.cloudbase.local</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Adminer</div>
+      <div class="ov-value">https://</div>
+      <div class="ov-note">adminer.cloudbase.local</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Uptime Kuma</div>
+      <div class="ov-value">https://</div>
+      <div class="ov-note">uptime.cloudbase.local</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Traefik</div>
+      <div class="ov-value">https://</div>
+      <div class="ov-note">traefik.cloudbase.local</div>
     </div>
   </div>
 
