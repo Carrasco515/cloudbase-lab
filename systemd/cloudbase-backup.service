@@ -1,0 +1,20 @@
+# CloudBase Lab — backup service (systemd user unit)
+#
+# Runs scripts/backup.sh once. Triggered by cloudbase-backup.timer.
+# Install: see README.md → "Automated backups".
+#
+# %h resolves to your home directory. Adjust the paths below if the
+# repository does not live at ~/projects/cloudbase-lab.
+
+[Unit]
+Description=CloudBase Lab — backup
+Documentation=https://github.com/Carrasco515/cloudbase-lab
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/projects/cloudbase-lab
+ExecStart=%h/projects/cloudbase-lab/scripts/backup.sh
+# Nextcloud volume archiving can take a while on large data sets.
+TimeoutStartSec=1800
+# The script checks itself whether Docker and the containers are up
+# and exits non-zero otherwise, which marks this unit as failed.

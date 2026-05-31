@@ -3,10 +3,13 @@
 #  CloudBase Lab — Backup Script
 #
 #  Usage:
-#    ./scripts/backup.sh                 # Standard backup (without .env)
-#    ./scripts/backup.sh --include-env   # Backup including .env (passwords!)
+#    ./scripts/backup.sh                      # Standard backup (without .env)
+#    ./scripts/backup.sh --include-env        # Backup including .env (passwords!)
+#    ./scripts/backup.sh --retention-days 14  # Keep backups for 14 days
+#    ./scripts/backup.sh --no-prune           # Do not delete old backups
 #
 #  Creates a backup in: backups/YYYY-MM-DD_HH-MM-SS/
+#  Old backups are pruned automatically (default: keep 7 days).
 # ============================================================
 
 set -euo pipefail
@@ -19,13 +22,31 @@ BACKUP_DIR="$PROJECT_DIR/backups/$TIMESTAMP"
 ENV_FILE="$PROJECT_DIR/.env"
 INCLUDE_ENV=false
 
+# ---- Retention (env-overridable, default 7 days) ----
+RETENTION_DAYS="${RETENTION_DAYS:-7}"
+PRUNE=true
+
+usage() {
+  echo "Usage: $0 [--include-env] [--retention-days N] [--no-prune]"
+}
+
 # ---- Arguments ----
-for arg in "$@"; do
-  case $arg in
-    --include-env) INCLUDE_ENV=true ;;
-    *) echo "Unknown argument: $arg"; echo "Usage: $0 [--include-env]"; exit 1 ;;
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --include-env)    INCLUDE_ENV=true ;;
+    --no-prune)       PRUNE=false ;;
+    --retention-days) shift; RETENTION_DAYS="${1:-}" ;;
+    -h|--help)        usage; exit 0 ;;
+    *) echo "Unknown argument: $1"; usage; exit 1 ;;
   esac
+  shift
 done
+
+# Validate retention is a non-negative integer
+if ! [[ "$RETENTION_DAYS" =~ ^[0-9]+$ ]]; then
+  echo "Invalid --retention-days value: '$RETENTION_DAYS' (must be a whole number)" >&2
+  exit 1
+fi
 
 # ---- Colors (disabled if no TTY) ----
 if [ -t 1 ]; then
@@ -164,6 +185,34 @@ else
 fi
 
 # ============================================================
+#  STEP 6 — Prune old backups (retention)
+# ============================================================
+log_section "Prune old backups"
+
+if [ "$PRUNE" != true ]; then
+  log_info "Pruning disabled (--no-prune)."
+elif [ "$RETENTION_DAYS" -eq 0 ]; then
+  log_info "Retention set to 0 — keeping all backups."
+else
+  log_info "Removing backups older than ${RETENTION_DAYS} day(s)..."
+  PRUNED=0
+  # Only timestamped backup dirs (YYYY-MM-DD_HH-MM-SS), never the current one.
+  while IFS= read -r -d '' old; do
+    [ "$old" = "$BACKUP_DIR" ] && continue
+    rm -rf "$old"
+    log_info "  removed $(basename "$old")"
+    PRUNED=$((PRUNED + 1))
+  done < <(find "$PROJECT_DIR/backups" -mindepth 1 -maxdepth 1 -type d \
+             -name '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]-[0-9][0-9]-[0-9][0-9]' \
+             -mtime +"$RETENTION_DAYS" -print0 2>/dev/null)
+  if [ "$PRUNED" -eq 0 ]; then
+    log_ok "No backups older than ${RETENTION_DAYS} day(s)."
+  else
+    log_ok "Pruned $PRUNED old backup(s)."
+  fi
+fi
+
+# ============================================================
 #  SUMMARY
 # ============================================================
 log_section "Backup complete"
@@ -171,8 +220,11 @@ log_section "Backup complete"
 TOTAL_SIZE="$(du -sh "$BACKUP_DIR" | cut -f1)"
 
 echo ""
-echo -e "${BOLD}  Location:${RESET}  $BACKUP_DIR"
-echo -e "${BOLD}  Total:${RESET}     $TOTAL_SIZE"
+echo -e "${BOLD}  Location:${RESET}   $BACKUP_DIR"
+echo -e "${BOLD}  Total:${RESET}      $TOTAL_SIZE"
+if [ "$PRUNE" = true ] && [ "$RETENTION_DAYS" -ne 0 ]; then
+  echo -e "${BOLD}  Retention:${RESET}  keep ${RETENTION_DAYS} day(s)"
+fi
 echo ""
 echo -e "  ${DIM}Included files:${RESET}"
 

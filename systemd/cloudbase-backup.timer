@@ -1,0 +1,16 @@
+# CloudBase Lab — backup timer (systemd user unit)
+#
+# Runs cloudbase-backup.service every day at 03:00.
+# Install: see README.md → "Automated backups".
+
+[Unit]
+Description=CloudBase Lab — daily backup at 03:00
+Documentation=https://github.com/Carrasco515/cloudbase-lab
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+# Catch up on the most recent run if the machine was off at 03:00.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -96,6 +96,23 @@ chmod +x scripts/backup.sh
 ./scripts/backup.sh --include-env
 ```
 
+### Retention
+
+Old backups are pruned automatically after each run. The default is to keep
+**7 days**; older timestamped folders are deleted (other files in `backups/`
+are left untouched).
+
+```bash
+# Keep backups for 14 days instead of 7
+./scripts/backup.sh --retention-days 14
+
+# Disable pruning for this run
+./scripts/backup.sh --no-prune
+
+# The default can also be set via environment variable
+RETENTION_DAYS=30 ./scripts/backup.sh
+```
+
 The script automatically creates a timestamped subfolder:
 
 ```
@@ -124,13 +141,45 @@ The important data lives in two named Docker volumes:
 - `cloudbase_nextcloud_data` — Nextcloud files and configuration
 - `cloudbase_mariadb_data`   — Database data (backed up via dump)
 
+### Automated backups (systemd timer)
+
+The `systemd/` folder contains a user-level service and timer that run the
+backup **every day at 03:00**. They use `%h` (your home directory) and assume
+the repo lives at `~/projects/cloudbase-lab` — adjust the paths in
+`cloudbase-backup.service` if it is somewhere else.
+
+```bash
+# 1. Install the units (user scope — no root needed)
+mkdir -p ~/.config/systemd/user
+cp systemd/cloudbase-backup.{service,timer} ~/.config/systemd/user/
+
+# 2. Reload and enable the timer
+systemctl --user daemon-reload
+systemctl --user enable --now cloudbase-backup.timer
+
+# 3. Make sure backups also run while you are logged out
+loginctl enable-linger "$USER"
+```
+
+Useful checks:
+
+```bash
+systemctl --user list-timers cloudbase-backup.timer   # next run / last run
+systemctl --user start cloudbase-backup.service       # run once now
+journalctl --user -u cloudbase-backup.service -n 50    # view the last log
+```
+
+> The service runs as your user, so backups are owned by you and Docker is
+> reached through your account (you must be in the `docker` group). Retention
+> applies on every run, so the `backups/` folder stays bounded.
+
 ---
 
 ## Next Steps
 
 - [ ] Set up HTTPS via Traefik or Caddy as a reverse proxy
 - [ ] Connect Nextcloud to external storage (NFS / SMB)
-- [ ] Set up automatic backups via cron job
+- [x] Set up automatic backups (systemd timer, daily at 03:00, with retention)
 - [ ] Add monitoring with Uptime Kuma or Grafana + Prometheus
 - [ ] Add Portainer for a Docker web GUI
 - [ ] Integrate Vaultwarden as a local password manager
