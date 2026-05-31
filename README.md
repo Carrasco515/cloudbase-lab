@@ -6,11 +6,12 @@ A local homelab based on Docker Compose.
 
 | Service    | URL                       | Description                |
 |------------|---------------------------|----------------------------|
-| Homepage   | http://localhost:8080     | Landing page / dashboard   |
-| Nextcloud  | http://localhost:8081     | Personal cloud             |
-| Adminer    | http://localhost:8082     | Database management        |
-| MariaDB    | internal (port 3306)      | Relational database        |
-| Redis      | internal (port 6379)      | In-memory cache            |
+| Homepage    | http://localhost:8080     | Landing page / dashboard   |
+| Nextcloud   | http://localhost:8081     | Personal cloud             |
+| Adminer     | http://localhost:8082     | Database management        |
+| Uptime Kuma | http://localhost:8083     | Monitoring / status pages  |
+| MariaDB     | internal (port 3306)      | Relational database        |
+| Redis       | internal (port 6379)      | In-memory cache            |
 
 ---
 
@@ -175,12 +176,35 @@ journalctl --user -u cloudbase-backup.service -n 50    # view the last log
 
 ---
 
+## Monitoring
+
+[Uptime Kuma](https://github.com/louislam/uptime-kuma) provides self-hosted
+uptime monitoring at http://localhost:8083. On first start it asks you to create
+an admin account, then you add monitors yourself.
+
+Because Uptime Kuma runs on the same `cloudbase_network`, it can reach the other
+services **by container name** — no host ports needed. Suggested monitors:
+
+| Monitor          | Type | Target                          |
+|------------------|------|---------------------------------|
+| Homepage         | HTTP | `http://cloudbase-homepage`     |
+| Nextcloud        | HTTP | `http://cloudbase-nextcloud/status.php` |
+| Adminer          | HTTP | `http://cloudbase-adminer:8080` |
+| MariaDB          | TCP  | `cloudbase-mariadb:3306`        |
+| Redis            | TCP  | `cloudbase-redis:6379`          |
+
+The monitor configuration is stored in the `cloudbase_uptimekuma_data` volume,
+so it survives restarts (and is **not** captured by the project-files backup —
+it lives in the Docker volume).
+
+---
+
 ## Next Steps
 
 - [ ] Set up HTTPS via Traefik or Caddy as a reverse proxy
 - [ ] Connect Nextcloud to external storage (NFS / SMB)
 - [x] Set up automatic backups (systemd timer, daily at 03:00, with retention)
-- [ ] Add monitoring with Uptime Kuma or Grafana + Prometheus
+- [x] Add monitoring with Uptime Kuma
 - [ ] Add Portainer for a Docker web GUI
 - [ ] Integrate Vaultwarden as a local password manager
 - [ ] Set up Watchtower for automatic image updates

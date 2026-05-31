@@ -171,6 +171,7 @@
     .stat-icon.cyan    { background: rgba(6,182,212,.15); }
     .stat-icon.orange  { background: rgba(249,115,22,.15); }
     .stat-icon.violet  { background: rgba(139,92,246,.15); }
+    .stat-icon.green   { background: rgba(34,197,94,.15); }
 
     .stat-text {}
     .stat-value { font-size: .95rem; font-weight: 700; color: var(--text); }
@@ -246,6 +247,7 @@
 
     .svc-card.nc::before  { background: linear-gradient(90deg, #0082c9, #38bdf8); }
     .svc-card.adm::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+    .svc-card.uk::before  { background: linear-gradient(90deg, #16a34a, #4ade80); }
     .svc-card.mdb::before { background: linear-gradient(90deg, #ea580c, #fb923c); }
     .svc-card.rds::before { background: linear-gradient(90deg, #dc2626, #fca5a5); }
 
@@ -261,6 +263,7 @@
 
     .svc-icon.nc  { background: rgba(0,130,201,.15); }
     .svc-icon.adm { background: rgba(239,68,68,.15); }
+    .svc-icon.uk  { background: rgba(22,163,74,.15); }
     .svc-icon.mdb { background: rgba(234,88,12,.15); }
     .svc-icon.rds { background: rgba(220,38,38,.12); }
 
@@ -319,6 +322,7 @@
 
     .btn-open.nc  { background: linear-gradient(135deg, #0369a1, #0ea5e9); color: #fff; }
     .btn-open.adm { background: linear-gradient(135deg, #b91c1c, #ef4444); color: #fff; }
+    .btn-open.uk  { background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; }
 
     .btn-intern {
       display: inline-flex; align-items: center; gap: .4rem;
@@ -457,6 +461,13 @@
         <div class="stat-label">Redis Alpine</div>
       </div>
     </div>
+    <div class="stat-card">
+      <div class="stat-icon green">&#128202;</div>
+      <div class="stat-text">
+        <div class="stat-value">Monitoring</div>
+        <div class="stat-label">Uptime Kuma</div>
+      </div>
+    </div>
   </div>
 
   <!-- ===== SERVICE STATUS CARDS ===== -->
@@ -510,6 +521,32 @@
       <div class="svc-footer">
         <div class="svc-port">Port <code>8082</code></div>
         <a class="btn-open adm" href="http://localhost:8082" target="_blank" rel="noopener">
+          &#8599; Open
+        </a>
+      </div>
+    </div>
+
+    <!-- Uptime Kuma -->
+    <div class="svc-card uk">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon uk">&#128202;</div>
+          <div>
+            <div class="svc-name">Uptime Kuma</div>
+            <div class="svc-type">Monitoring &amp; Status</div>
+          </div>
+        </div>
+        <span class="badge badge-online"><span class="badge-dot"></span>Online</span>
+      </div>
+      <p class="svc-desc">Self-hosted uptime monitoring. Watches the other services and sends alerts when something goes down.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">Uptime Kuma</span>
+        <span class="meta-chip">Health Checks</span>
+        <span class="meta-chip">Alerts</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Port <code>8083</code></div>
+        <a class="btn-open uk" href="http://localhost:8083" target="_blank" rel="noopener">
           &#8599; Open
         </a>
       </div>
@@ -574,6 +611,9 @@
     <a class="btn btn-secondary" href="http://localhost:8082" target="_blank" rel="noopener">
       &#128196; Open Adminer
     </a>
+    <a class="btn btn-secondary" href="http://localhost:8083" target="_blank" rel="noopener">
+      &#128202; Open Uptime Kuma
+    </a>
     <a class="btn btn-cyan" href="http://localhost:8080" target="_blank" rel="noopener">
       &#127968; Dashboard
     </a>
@@ -596,6 +636,11 @@
       <div class="ov-service">Adminer</div>
       <div class="ov-value">:8082</div>
       <div class="ov-note">PHP &middot; Web UI</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Uptime Kuma</div>
+      <div class="ov-value">:8083</div>
+      <div class="ov-note">Node &middot; Monitoring</div>
     </div>
     <div class="ov-row">
       <div class="ov-service">MariaDB</div>

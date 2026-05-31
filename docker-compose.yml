@@ -88,11 +88,29 @@ services:
     networks:
       - cloudbase
 
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: cloudbase-uptime-kuma
+    ports:
+      - "${UPTIMEKUMA_PORT:-8083}:3001"
+    volumes:
+      - uptimekuma_data:/app/data
+    restart: unless-stopped
+    networks:
+      - cloudbase
+    healthcheck:
+      test: ["CMD", "extra/healthcheck"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+
 volumes:
   nextcloud_data:
     name: cloudbase_nextcloud_data
   mariadb_data:
     name: cloudbase_mariadb_data
+  uptimekuma_data:
+    name: cloudbase_uptimekuma_data
 
 networks:
   cloudbase:
