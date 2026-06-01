@@ -13,6 +13,7 @@ A local homelab based on Docker Compose.
 | Nextcloud   | http://localhost:8081     | Personal cloud                 |
 | Adminer     | http://localhost:8082     | Database management            |
 | Uptime Kuma | http://localhost:8083     | Monitoring / status pages      |
+| Portainer   | http://localhost:8084     | Docker management web UI       |
 | MariaDB     | internal (port 3306)      | Relational database            |
 | Redis       | internal (port 6379)      | In-memory cache                |
 
@@ -100,6 +101,7 @@ HTTPS.
 | `nextcloud.cloudbase.local` | Nextcloud   |
 | `adminer.cloudbase.local`   | Adminer     |
 | `uptime.cloudbase.local`    | Uptime Kuma |
+| `portainer.cloudbase.local` | Portainer   |
 | `traefik.cloudbase.local`   | Traefik dashboard |
 
 ### 1. Map the hostnames to localhost
@@ -109,7 +111,7 @@ your hosts file (`/etc/hosts` on Linux/macOS, `C:\Windows\System32\drivers\etc\h
 on Windows):
 
 ```
-127.0.0.1  homepage.cloudbase.local nextcloud.cloudbase.local adminer.cloudbase.local uptime.cloudbase.local traefik.cloudbase.local
+127.0.0.1  homepage.cloudbase.local nextcloud.cloudbase.local adminer.cloudbase.local uptime.cloudbase.local portainer.cloudbase.local traefik.cloudbase.local
 ```
 
 ### 2. Open a service
@@ -262,6 +264,32 @@ it lives in the Docker volume).
 
 ---
 
+## Docker management (Portainer)
+
+[Portainer](https://www.portainer.io/) provides a web UI for managing the Docker
+host at http://localhost:8084 (or https://portainer.cloudbase.local via Traefik).
+You can inspect containers, view logs, check volumes and networks, and start or
+stop services from the browser.
+
+On **first start** Portainer asks you to create an admin account. Do this within
+a few minutes of starting the stack — for security, Portainer disables initial
+setup if the account is not created shortly after the container comes up. If that
+happens, just restart it:
+
+```bash
+docker compose restart portainer
+```
+
+Then connect it to the **local** Docker environment (the socket is already
+mounted), and you will see all `cloudbase-*` containers.
+
+> Portainer needs **read-write** access to the Docker socket
+> (`/var/run/docker.sock`) because it manages the host — that is more than
+> Traefik's read-only access. Keep it bound to the local host only and protect
+> the admin account.
+
+---
+
 ## Next Steps
 
 - [x] Set up a Traefik reverse proxy with HTTPS and local hostnames
@@ -269,7 +297,7 @@ it lives in the Docker volume).
 - [ ] Connect Nextcloud to external storage (NFS / SMB)
 - [x] Set up automatic backups (systemd timer, daily at 03:00, with retention)
 - [x] Add monitoring with Uptime Kuma
-- [ ] Add Portainer for a Docker web GUI
+- [x] Add Portainer for a Docker web GUI
 - [ ] Integrate Vaultwarden as a local password manager
 - [ ] Set up Watchtower for automatic image updates
 

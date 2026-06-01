@@ -249,6 +249,7 @@
     .svc-card.nc::before  { background: linear-gradient(90deg, #0082c9, #38bdf8); }
     .svc-card.adm::before { background: linear-gradient(90deg, #ef4444, #f87171); }
     .svc-card.uk::before  { background: linear-gradient(90deg, #16a34a, #4ade80); }
+    .svc-card.ptn::before { background: linear-gradient(90deg, #0d9488, #2dd4bf); }
     .svc-card.mdb::before { background: linear-gradient(90deg, #ea580c, #fb923c); }
     .svc-card.rds::before { background: linear-gradient(90deg, #dc2626, #fca5a5); }
 
@@ -266,6 +267,7 @@
     .svc-icon.nc  { background: rgba(0,130,201,.15); }
     .svc-icon.adm { background: rgba(239,68,68,.15); }
     .svc-icon.uk  { background: rgba(22,163,74,.15); }
+    .svc-icon.ptn { background: rgba(13,148,136,.15); }
     .svc-icon.mdb { background: rgba(234,88,12,.15); }
     .svc-icon.rds { background: rgba(220,38,38,.12); }
 
@@ -326,6 +328,7 @@
     .btn-open.adm { background: linear-gradient(135deg, #b91c1c, #ef4444); color: #fff; }
     .btn-open.uk  { background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; }
     .btn-open.tfk { background: linear-gradient(135deg, #0284c7, #06b6d4); color: #fff; }
+    .btn-open.ptn { background: linear-gradient(135deg, #0f766e, #14b8a6); color: #fff; }
 
     .btn-intern {
       display: inline-flex; align-items: center; gap: .4rem;
@@ -471,6 +474,13 @@
         <div class="stat-label">Uptime Kuma</div>
       </div>
     </div>
+    <div class="stat-card">
+      <div class="stat-icon cyan">&#128051;</div>
+      <div class="stat-text">
+        <div class="stat-value">Management</div>
+        <div class="stat-label">Portainer CE</div>
+      </div>
+    </div>
   </div>
 
   <!-- ===== SERVICE STATUS CARDS ===== -->
@@ -581,6 +591,32 @@
       </div>
     </div>
 
+    <!-- Portainer -->
+    <div class="svc-card ptn">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon ptn">&#128051;</div>
+          <div>
+            <div class="svc-name">Portainer</div>
+            <div class="svc-type">Docker Management UI</div>
+          </div>
+        </div>
+        <span class="badge badge-online"><span class="badge-dot"></span>Online</span>
+      </div>
+      <p class="svc-desc">Web UI for the Docker host. Inspect containers, logs, volumes and networks &mdash; and start or stop services from the browser.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">Portainer CE</span>
+        <span class="meta-chip">Containers</span>
+        <span class="meta-chip">Volumes</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Port <code>8084</code></div>
+        <a class="btn-open ptn" href="http://localhost:8084" target="_blank" rel="noopener">
+          &#8599; Open
+        </a>
+      </div>
+    </div>
+
     <!-- MariaDB -->
     <div class="svc-card mdb">
       <div class="svc-header">
@@ -643,6 +679,9 @@
     <a class="btn btn-secondary" href="http://localhost:8083" target="_blank" rel="noopener">
       &#128202; Open Uptime Kuma
     </a>
+    <a class="btn btn-secondary" href="http://localhost:8084" target="_blank" rel="noopener">
+      &#128051; Open Portainer
+    </a>
     <a class="btn btn-cyan" href="http://localhost:8080" target="_blank" rel="noopener">
       &#127968; Dashboard
     </a>
@@ -670,6 +709,11 @@
       <div class="ov-service">Uptime Kuma</div>
       <div class="ov-value">:8083</div>
       <div class="ov-note">Node &middot; Monitoring</div>
+    </div>
+    <div class="ov-row">
+      <div class="ov-service">Portainer</div>
+      <div class="ov-value">:8084</div>
+      <div class="ov-note">Docker &middot; Management</div>
     </div>
     <div class="ov-row">
       <div class="ov-service">MariaDB</div>
@@ -712,6 +756,11 @@
       <div class="ov-note">uptime.cloudbase.local</div>
     </div>
     <div class="ov-row">
+      <div class="ov-service">Portainer</div>
+      <div class="ov-value">https://</div>
+      <div class="ov-note">portainer.cloudbase.local</div>
+    </div>
+    <div class="ov-row">
       <div class="ov-service">Traefik</div>
       <div class="ov-value">https://</div>
       <div class="ov-note">traefik.cloudbase.local</div>
@@ -725,7 +774,8 @@
       <a href="https://nextcloud.com" target="_blank" rel="noopener">Nextcloud</a> &bull;
       <a href="https://adminer.org" target="_blank" rel="noopener">Adminer</a> &bull;
       <a href="https://mariadb.org" target="_blank" rel="noopener">MariaDB</a> &bull;
-      <a href="https://redis.io" target="_blank" rel="noopener">Redis</a>
+      <a href="https://redis.io" target="_blank" rel="noopener">Redis</a> &bull;
+      <a href="https://www.portainer.io" target="_blank" rel="noopener">Portainer</a>
     </span>
   </footer>
 

@@ -167,6 +167,27 @@ services:
       - "traefik.http.routers.uptime.tls=true"
       - "traefik.http.services.uptime.loadbalancer.server.port=3001"
 
+  portainer:
+    image: portainer/portainer-ce:lts
+    container_name: cloudbase-portainer
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "${PORTAINER_PORT:-8084}:9000"
+    volumes:
+      # Portainer manages the Docker host, so it needs read-write access to the
+      # socket (unlike Traefik, which only reads it for discovery). Keep local-only.
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: unless-stopped
+    networks:
+      - cloudbase
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.${CLOUDBASE_DOMAIN:-cloudbase.local}`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
 volumes:
   nextcloud_data:
     name: cloudbase_nextcloud_data
@@ -174,6 +195,8 @@ volumes:
     name: cloudbase_mariadb_data
   uptimekuma_data:
     name: cloudbase_uptimekuma_data
+  portainer_data:
+    name: cloudbase_portainer_data
 
 networks:
   cloudbase:
