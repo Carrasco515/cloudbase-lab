@@ -1,5 +1,7 @@
 # CloudBase Lab
 
+[![CI](https://github.com/Carrasco515/cloudbase-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Carrasco515/cloudbase-lab/actions/workflows/ci.yml)
+
 A local homelab based on Docker Compose.
 
 ## Services
