@@ -14,6 +14,7 @@ A local homelab based on Docker Compose.
 | Adminer     | http://localhost:8082     | Database management            |
 | Uptime Kuma | http://localhost:8083     | Monitoring / status pages      |
 | Portainer   | http://localhost:8084     | Docker management web UI       |
+| Vaultwarden | http://localhost:8085     | Password manager (local-only)  |
 | Watchtower  | internal (background)     | Image updates (opt-in by label)|
 | MariaDB     | internal (port 3306)      | Relational database            |
 | Redis       | internal (port 6379)      | In-memory cache                |
@@ -103,6 +104,7 @@ HTTPS.
 | `adminer.cloudbase.local`   | Adminer     |
 | `uptime.cloudbase.local`    | Uptime Kuma |
 | `portainer.cloudbase.local` | Portainer   |
+| `vaultwarden.cloudbase.local` | Vaultwarden |
 | `traefik.cloudbase.local`   | Traefik dashboard |
 
 ### 1. Map the hostnames to localhost
@@ -112,7 +114,7 @@ your hosts file (`/etc/hosts` on Linux/macOS, `C:\Windows\System32\drivers\etc\h
 on Windows):
 
 ```
-127.0.0.1  homepage.cloudbase.local nextcloud.cloudbase.local adminer.cloudbase.local uptime.cloudbase.local portainer.cloudbase.local traefik.cloudbase.local
+127.0.0.1  homepage.cloudbase.local nextcloud.cloudbase.local adminer.cloudbase.local uptime.cloudbase.local portainer.cloudbase.local vaultwarden.cloudbase.local traefik.cloudbase.local
 ```
 
 ### 2. Open a service
@@ -291,6 +293,71 @@ mounted), and you will see all `cloudbase-*` containers.
 
 ---
 
+## Password manager (Vaultwarden)
+
+[Vaultwarden](https://github.com/dani-garcia/vaultwarden) is a lightweight,
+Bitwarden-compatible password-manager server. Use it with the official Bitwarden
+apps and browser extensions, pointed at your local server. Reach it at
+https://vaultwarden.cloudbase.local (Traefik) or http://localhost:8085.
+
+### Security model (local-only)
+
+This service holds your most sensitive data, so it is locked down by default:
+
+- **Not exposed to the LAN/internet.** The direct port is bound to
+  `127.0.0.1:8085` only (not `0.0.0.0`), and the Traefik hostname resolves to
+  `127.0.0.1`. Nothing listens on an externally reachable interface.
+- **Signups are closed** (`SIGNUPS_ALLOWED=false`). Nobody can register, even if
+  they somehow reach the URL. See below for creating your first account.
+- **The `/admin` panel is disabled** while `ADMIN_TOKEN` is empty. Enable it only
+  if you need it, with a self-generated token (never commit a real one).
+- **Data lives in a named volume** (`cloudbase_vaultwarden_data`). Like the
+  Uptime Kuma volume, it is **not** captured by the `project-files` backup — it
+  is a Docker volume. Back it up separately if it holds real credentials.
+
+### Create your first account
+
+Because signups are closed by default, open registration briefly, register, then
+close it again:
+
+```bash
+# 1. In .env, temporarily allow signups
+VAULTWARDEN_SIGNUPS_ALLOWED=true
+
+# 2. Apply and register your account at https://vaultwarden.cloudbase.local
+docker compose up -d vaultwarden
+
+# 3. Set it back to false in .env and recreate — registration is closed again
+VAULTWARDEN_SIGNUPS_ALLOWED=false
+docker compose up -d vaultwarden
+```
+
+> ⚠️ **Risk of leaving signups open:** with `SIGNUPS_ALLOWED=true`, anyone who
+> can reach the URL (e.g. another device on your LAN, or the internet if you
+> ever expose it) can create an account on your server. Keep it `false` except
+> for the few minutes you need to register.
+
+### Optional: the admin panel
+
+To manage users and settings via `/admin`, generate a token **yourself** and put
+its Argon2 hash in `VAULTWARDEN_ADMIN_TOKEN`:
+
+```bash
+docker run --rm -it vaultwarden/server /vaultwarden hash
+```
+
+Paste the resulting `$argon2…` hash into `.env` (do not commit it) and recreate
+the container. Leave `VAULTWARDEN_ADMIN_TOKEN` empty to keep `/admin` disabled.
+
+### Exposing it for real (later)
+
+Only ever put Vaultwarden on the internet behind a **trusted TLS certificate**
+(Let's Encrypt with a real domain) and a properly secured reverse proxy. The
+self-signed local certificate is fine for LAN/loopback use but not for public
+exposure. Until then, keep it local-only as configured here.
+
+---
+
 ## Automatic updates (Watchtower)
 
 [Watchtower](https://containrrr.dev/watchtower/) updates containers when a newer
@@ -377,7 +444,7 @@ current image — that is the default for everything else.
 - [x] Set up automatic backups (systemd timer, daily at 03:00, with retention)
 - [x] Add monitoring with Uptime Kuma
 - [x] Add Portainer for a Docker web GUI
-- [ ] Integrate Vaultwarden as a local password manager
+- [x] Integrate Vaultwarden as a local password manager
 - [x] Set up Watchtower for automatic image updates
 
 ---

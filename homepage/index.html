@@ -251,6 +251,7 @@
     .svc-card.uk::before  { background: linear-gradient(90deg, #16a34a, #4ade80); }
     .svc-card.ptn::before { background: linear-gradient(90deg, #0d9488, #2dd4bf); }
     .svc-card.wt::before  { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+    .svc-card.vw::before  { background: linear-gradient(90deg, #1d4ed8, #3b82f6); }
     .svc-card.mdb::before { background: linear-gradient(90deg, #ea580c, #fb923c); }
     .svc-card.rds::before { background: linear-gradient(90deg, #dc2626, #fca5a5); }
 
@@ -270,6 +271,7 @@
     .svc-icon.uk  { background: rgba(22,163,74,.15); }
     .svc-icon.ptn { background: rgba(13,148,136,.15); }
     .svc-icon.wt  { background: rgba(124,58,237,.15); }
+    .svc-icon.vw  { background: rgba(29,78,216,.15); }
     .svc-icon.mdb { background: rgba(234,88,12,.15); }
     .svc-icon.rds { background: rgba(220,38,38,.12); }
 
@@ -331,6 +333,7 @@
     .btn-open.uk  { background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; }
     .btn-open.tfk { background: linear-gradient(135deg, #0284c7, #06b6d4); color: #fff; }
     .btn-open.ptn { background: linear-gradient(135deg, #0f766e, #14b8a6); color: #fff; }
+    .btn-open.vw  { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; }
 
     .btn-intern {
       display: inline-flex; align-items: center; gap: .4rem;
@@ -490,6 +493,13 @@
         <div class="stat-label">Watchtower</div>
       </div>
     </div>
+    <div class="stat-card">
+      <div class="stat-icon indigo">&#128272;</div>
+      <div class="stat-text">
+        <div class="stat-value">Password Vault</div>
+        <div class="stat-label">Vaultwarden</div>
+      </div>
+    </div>
   </div>
 
   <!-- ===== SERVICE STATUS CARDS ===== -->
@@ -626,6 +636,32 @@
       </div>
     </div>
 
+    <!-- Vaultwarden -->
+    <div class="svc-card vw">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon vw">&#128272;</div>
+          <div>
+            <div class="svc-name">Vaultwarden</div>
+            <div class="svc-type">Password Manager</div>
+          </div>
+        </div>
+        <span class="badge badge-protected"><span class="badge-dot"></span>Protected</span>
+      </div>
+      <p class="svc-desc">Self-hosted, Bitwarden-compatible password manager. Bound to localhost only, with signups closed by default.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">Vaultwarden</span>
+        <span class="meta-chip">Bitwarden API</span>
+        <span class="meta-chip">Local-only</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Port <code>8085</code></div>
+        <a class="btn-open vw" href="http://localhost:8085" target="_blank" rel="noopener">
+          &#8599; Open
+        </a>
+      </div>
+    </div>
+
     <!-- MariaDB -->
     <div class="svc-card mdb">
       <div class="svc-header">
@@ -715,6 +751,9 @@
     <a class="btn btn-secondary" href="http://localhost:8084" target="_blank" rel="noopener">
       &#128051; Open Portainer
     </a>
+    <a class="btn btn-secondary" href="http://localhost:8085" target="_blank" rel="noopener">
+      &#128272; Open Vaultwarden
+    </a>
     <a class="btn btn-cyan" href="http://localhost:8080" target="_blank" rel="noopener">
       &#127968; Dashboard
     </a>
@@ -759,6 +798,11 @@
       <div class="ov-note">redis:6379</div>
     </div>
     <div class="ov-row">
+      <div class="ov-service">Vaultwarden</div>
+      <div class="ov-value">:8085</div>
+      <div class="ov-note">127.0.0.1 &middot; Local-only</div>
+    </div>
+    <div class="ov-row">
       <div class="ov-service">Watchtower</div>
       <div class="ov-value">Background</div>
       <div class="ov-note">Auto updates &middot; 04:00</div>
@@ -799,6 +843,11 @@
       <div class="ov-note">portainer.cloudbase.local</div>
     </div>
     <div class="ov-row">
+      <div class="ov-service">Vaultwarden</div>
+      <div class="ov-value">https://</div>
+      <div class="ov-note">vaultwarden.cloudbase.local</div>
+    </div>
+    <div class="ov-row">
       <div class="ov-service">Traefik</div>
       <div class="ov-value">https://</div>
       <div class="ov-note">traefik.cloudbase.local</div>
@@ -814,7 +863,8 @@
       <a href="https://mariadb.org" target="_blank" rel="noopener">MariaDB</a> &bull;
       <a href="https://redis.io" target="_blank" rel="noopener">Redis</a> &bull;
       <a href="https://www.portainer.io" target="_blank" rel="noopener">Portainer</a> &bull;
-      <a href="https://containrrr.dev/watchtower/" target="_blank" rel="noopener">Watchtower</a>
+      <a href="https://containrrr.dev/watchtower/" target="_blank" rel="noopener">Watchtower</a> &bull;
+      <a href="https://github.com/dani-garcia/vaultwarden" target="_blank" rel="noopener">Vaultwarden</a>
     </span>
   </footer>
 
