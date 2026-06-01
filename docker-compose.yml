@@ -57,6 +57,8 @@ services:
       - "traefik.http.routers.homepage.entrypoints=websecure"
       - "traefik.http.routers.homepage.tls=true"
       - "traefik.http.services.homepage.loadbalancer.server.port=80"
+      # Non-critical, stateless service — safe to auto-update via Watchtower.
+      - "com.centurylinklabs.watchtower.enable=true"
 
   nextcloud:
     image: nextcloud:29
@@ -144,6 +146,8 @@ services:
       - "traefik.http.routers.adminer.entrypoints=websecure"
       - "traefik.http.routers.adminer.tls=true"
       - "traefik.http.services.adminer.loadbalancer.server.port=8080"
+      # Non-critical, stateless service — safe to auto-update via Watchtower.
+      - "com.centurylinklabs.watchtower.enable=true"
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
@@ -187,6 +191,33 @@ services:
       - "traefik.http.routers.portainer.entrypoints=websecure"
       - "traefik.http.routers.portainer.tls=true"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: cloudbase-watchtower
+    environment:
+      # The published containrrr/watchtower image ships an old Docker client
+      # (API 1.25); modern daemons require >= 1.44. Pin the negotiated API
+      # version so the client talks to the daemon instead of crash-looping.
+      DOCKER_API_VERSION: "1.44"
+      # Run the update check on a cron schedule (6-field, with seconds).
+      # Default: every day at 04:00, i.e. after the 03:00 backup timer.
+      WATCHTOWER_SCHEDULE: "${WATCHTOWER_SCHEDULE:-0 0 4 * * *}"
+      # Opt-in strategy: only update containers that explicitly carry the
+      # label com.centurylinklabs.watchtower.enable=true. Everything else
+      # (Nextcloud, MariaDB, Redis, Traefik, …) is left untouched.
+      WATCHTOWER_LABEL_ENABLE: "true"
+      # Remove the old image after a successful update.
+      WATCHTOWER_CLEANUP: "true"
+      # Local timezone so the schedule matches wall-clock time (default UTC).
+      TZ: ${TZ:-UTC}
+    volumes:
+      # Watchtower pulls images and recreates containers, so it needs
+      # read-write access to the Docker socket. Keep local-only.
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      - cloudbase
 
 volumes:
   nextcloud_data:

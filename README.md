@@ -14,6 +14,7 @@ A local homelab based on Docker Compose.
 | Adminer     | http://localhost:8082     | Database management            |
 | Uptime Kuma | http://localhost:8083     | Monitoring / status pages      |
 | Portainer   | http://localhost:8084     | Docker management web UI       |
+| Watchtower  | internal (background)     | Image updates (opt-in by label)|
 | MariaDB     | internal (port 3306)      | Relational database            |
 | Redis       | internal (port 6379)      | In-memory cache                |
 
@@ -290,6 +291,84 @@ mounted), and you will see all `cloudbase-*` containers.
 
 ---
 
+## Automatic updates (Watchtower)
+
+[Watchtower](https://containrrr.dev/watchtower/) updates containers when a newer
+image is published for the **same tag**. It runs as a background daemon — no port
+and no web UI.
+
+### Opt-in strategy (label based)
+
+Watchtower runs with `WATCHTOWER_LABEL_ENABLE=true`, so it **only touches
+containers that explicitly opt in** with the label
+`com.centurylinklabs.watchtower.enable=true`. Nothing is auto-updated unless you
+say so.
+
+Currently enabled (non-critical, stateless services):
+
+| Service   | Auto-update | Reason |
+|-----------|-------------|--------|
+| Homepage  | ✅ yes      | Stateless nginx, safe to recreate |
+| Adminer   | ✅ yes      | Stateless DB UI, safe to recreate |
+| Nextcloud | ❌ no       | Stateful app — update manually and run `occ upgrade` |
+| MariaDB   | ❌ no       | Database — never auto-restart under load |
+| Redis     | ❌ no       | Cache backing Nextcloud sessions/locks |
+| Traefik   | ❌ no       | Edge router for the whole stack |
+| Portainer / Uptime Kuma | ❌ no | Hold state in volumes — update deliberately |
+
+Because images are pinned to tags (`nextcloud:29`, `mariadb:lts`, …), even an
+enabled container only receives patch/minor updates *within* its tag; Watchtower
+never jumps to a new major version on its own. After a successful update the old
+image is removed (`WATCHTOWER_CLEANUP`).
+
+### Schedule
+
+By default the check runs **every day at 04:00**, just after the 03:00 backup
+timer, so updates happen against a fresh backup. The schedule is a 6-field cron
+expression (with seconds) and is interpreted in **local time** (the `TZ` set in
+`.env`, not UTC). Both are configurable in `.env`:
+
+```bash
+# In .env — run at 04:00 daily (default), in local time
+WATCHTOWER_SCHEDULE=0 0 4 * * *
+# Local timezone the schedule is interpreted in
+TZ=Europe/Zurich
+```
+
+### Useful commands
+
+```bash
+# See what Watchtower is doing
+docker compose logs -f watchtower
+
+# Trigger an update check immediately (one-off, then exit).
+# --run-once also ignores the label filter, so it checks every container.
+docker compose run --rm watchtower --run-once
+```
+
+### Enabling updates for another container
+
+To let Watchtower auto-update a service, add this label to it in
+`docker-compose.yml` (this is what Homepage and Adminer already have):
+
+```yaml
+labels:
+  - "com.centurylinklabs.watchtower.enable=true"
+```
+
+Leave the label off (or set it to `false`) to keep a container pinned to its
+current image — that is the default for everything else.
+
+> Watchtower needs **read-write** access to the Docker socket (it pulls images
+> and recreates containers). Keep it bound to the local host only.
+
+> **Note:** the published `containrrr/watchtower` image ships an old Docker
+> client (API 1.25) that modern daemons reject (`client version 1.25 is too
+> old`). The compose file pins `DOCKER_API_VERSION=1.44` so the client
+> negotiates a supported version instead of crash-looping.
+
+---
+
 ## Next Steps
 
 - [x] Set up a Traefik reverse proxy with HTTPS and local hostnames
@@ -299,7 +378,7 @@ mounted), and you will see all `cloudbase-*` containers.
 - [x] Add monitoring with Uptime Kuma
 - [x] Add Portainer for a Docker web GUI
 - [ ] Integrate Vaultwarden as a local password manager
-- [ ] Set up Watchtower for automatic image updates
+- [x] Set up Watchtower for automatic image updates
 
 ---
 

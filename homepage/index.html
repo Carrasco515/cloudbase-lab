@@ -250,6 +250,7 @@
     .svc-card.adm::before { background: linear-gradient(90deg, #ef4444, #f87171); }
     .svc-card.uk::before  { background: linear-gradient(90deg, #16a34a, #4ade80); }
     .svc-card.ptn::before { background: linear-gradient(90deg, #0d9488, #2dd4bf); }
+    .svc-card.wt::before  { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
     .svc-card.mdb::before { background: linear-gradient(90deg, #ea580c, #fb923c); }
     .svc-card.rds::before { background: linear-gradient(90deg, #dc2626, #fca5a5); }
 
@@ -268,6 +269,7 @@
     .svc-icon.adm { background: rgba(239,68,68,.15); }
     .svc-icon.uk  { background: rgba(22,163,74,.15); }
     .svc-icon.ptn { background: rgba(13,148,136,.15); }
+    .svc-icon.wt  { background: rgba(124,58,237,.15); }
     .svc-icon.mdb { background: rgba(234,88,12,.15); }
     .svc-icon.rds { background: rgba(220,38,38,.12); }
 
@@ -481,6 +483,13 @@
         <div class="stat-label">Portainer CE</div>
       </div>
     </div>
+    <div class="stat-card">
+      <div class="stat-icon violet">&#128260;</div>
+      <div class="stat-text">
+        <div class="stat-value">Auto Updates</div>
+        <div class="stat-label">Watchtower</div>
+      </div>
+    </div>
   </div>
 
   <!-- ===== SERVICE STATUS CARDS ===== -->
@@ -665,6 +674,30 @@
       </div>
     </div>
 
+    <!-- Watchtower -->
+    <div class="svc-card wt">
+      <div class="svc-header">
+        <div class="svc-icon-wrap">
+          <div class="svc-icon wt">&#128260;</div>
+          <div>
+            <div class="svc-name">Watchtower</div>
+            <div class="svc-type">Automatic Updates</div>
+          </div>
+        </div>
+        <span class="badge badge-intern"><span class="badge-dot"></span>Background</span>
+      </div>
+      <p class="svc-desc">Background daemon that auto-updates only opt-in containers (Homepage, Adminer) to newer images on the same tag. Runs daily and cleans up old images.</p>
+      <div class="svc-meta">
+        <span class="meta-chip">Watchtower</span>
+        <span class="meta-chip">Opt-in label</span>
+        <span class="meta-chip">Cleanup</span>
+      </div>
+      <div class="svc-footer">
+        <div class="svc-port">Schedule <code>04:00</code></div>
+        <span class="btn-intern">&#128260; Background daemon</span>
+      </div>
+    </div>
+
   </div>
 
   <!-- ===== QUICK ACCESS ===== -->
@@ -726,6 +759,11 @@
       <div class="ov-note">redis:6379</div>
     </div>
     <div class="ov-row">
+      <div class="ov-service">Watchtower</div>
+      <div class="ov-value">Background</div>
+      <div class="ov-note">Auto updates &middot; 04:00</div>
+    </div>
+    <div class="ov-row">
       <div class="ov-service">Network</div>
       <div class="ov-value">Bridge</div>
       <div class="ov-note">cloudbase_network</div>
@@ -775,7 +813,8 @@
       <a href="https://adminer.org" target="_blank" rel="noopener">Adminer</a> &bull;
       <a href="https://mariadb.org" target="_blank" rel="noopener">MariaDB</a> &bull;
       <a href="https://redis.io" target="_blank" rel="noopener">Redis</a> &bull;
-      <a href="https://www.portainer.io" target="_blank" rel="noopener">Portainer</a>
+      <a href="https://www.portainer.io" target="_blank" rel="noopener">Portainer</a> &bull;
+      <a href="https://containrrr.dev/watchtower/" target="_blank" rel="noopener">Watchtower</a>
     </span>
   </footer>
 
