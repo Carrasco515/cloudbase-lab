@@ -232,7 +232,7 @@ echo ""
 echo -e "  ${DIM}Included files:${RESET}"
 
 find "$BACKUP_DIR" -type f | while read -r f; do
-  rel="${f#$BACKUP_DIR/}"
+  rel="${f#"$BACKUP_DIR"/}"
   size="$(du -sh "$f" 2>/dev/null | cut -f1)"
   echo -e "  ${GREEN}✔${RESET}  $rel  ${DIM}($size)${RESET}"
 done

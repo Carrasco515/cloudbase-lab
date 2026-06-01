@@ -273,6 +273,24 @@ it lives in the Docker volume).
 
 ---
 
+## Continuous Integration (CI)
+
+Every push and pull request to `main` triggers a GitHub Actions workflow
+(`.github/workflows/ci.yml`) that validates the project. It runs read-only
+checks only — **it never starts the stack, never deploys, and never prints
+secrets**:
+
+| Check | What it does |
+|---|---|
+| Required files | Verifies `docker-compose.yml` and `.env.example` exist |
+| Compose config | Runs `docker compose config --quiet` to validate the syntax (using `.env.example` placeholders, so no real secrets are involved) |
+| Backup syntax | Runs `bash -n scripts/backup.sh` to catch shell syntax errors |
+| Shell lint | Runs `shellcheck` on the scripts (if available on the runner) |
+
+This is **CI only** — there is intentionally no CD (deployment) step yet.
+
+---
+
 ## Security Notes
 
 - Never commit `.env` to Git (it is listed in `.gitignore`)

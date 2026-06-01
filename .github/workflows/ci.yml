@@ -1,0 +1,60 @@
+name: CI
+
+# Continuous Integration only — this workflow validates the project.
+# It never starts the stack, never deploys, and never prints secrets.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          missing=0
+          for f in docker-compose.yml .env.example; do
+            if [ -f "$f" ]; then
+              echo "OK: $f is present"
+            else
+              echo "MISSING: $f is required but was not found" >&2
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Validate docker compose config
+        run: |
+          # Use the example file (placeholders only — no real secrets) so that
+          # all variables resolve. --quiet validates without printing the config.
+          cp .env.example .env
+          docker compose config --quiet
+          echo "OK: docker compose configuration is valid"
+
+      - name: Check backup script syntax (bash -n)
+        run: |
+          bash -n scripts/backup.sh
+          echo "OK: scripts/backup.sh has no syntax errors"
+
+      - name: Lint shell scripts with shellcheck (if available)
+        run: |
+          if command -v shellcheck >/dev/null 2>&1; then
+            # Lint every tracked shell script.
+            mapfile -t scripts < <(find scripts -type f -name '*.sh' 2>/dev/null)
+            if [ "${#scripts[@]}" -eq 0 ]; then
+              echo "No shell scripts found to lint."
+            else
+              shellcheck "${scripts[@]}"
+              echo "OK: shellcheck passed for ${#scripts[@]} script(s)"
+            fi
+          else
+            echo "shellcheck not available — skipping (this is allowed)."
+          fi
