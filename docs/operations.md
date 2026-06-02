@@ -188,6 +188,20 @@ Restore is a manual, deliberate procedure. The step-by-step notes live at:
 
 - [`scripts/restore-notes.md`](../scripts/restore-notes.md)
 
+## Verify a backup (restore test)
+
+Check that the latest backup is intact and restorable — read-only, never touches
+production data or volumes:
+
+```bash
+./scripts/verify-backup.sh            # verify the latest backup
+./scripts/verify-backup.sh backups/2026-05-30_21-58-00   # a specific one
+```
+
+The full procedure (gzip/tar integrity, safe MariaDB and Nextcloud validation,
+temp-folder extraction, cleanup, and a future isolated-restore drill) is
+documented in [`restore-test.md`](restore-test.md).
+
 ## Update strategy with Watchtower
 
 Watchtower auto-updates **only** services that opt in with the label

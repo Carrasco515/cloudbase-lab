@@ -208,6 +208,20 @@ backups/
 
 See `scripts/restore-notes.md` for a detailed step-by-step guide.
 
+### Verify a backup (restore test)
+
+A backup is only trustworthy once you have verified it. Run the read-only
+checker to confirm the latest backup is intact and restorable — it never
+touches production data or Docker volumes and never prints secrets:
+
+```bash
+./scripts/verify-backup.sh
+```
+
+The full safe restore-test procedure (integrity checks, MariaDB/Nextcloud
+validation, temp-folder extraction, cleanup and a future isolated full-restore
+drill) is documented in [`docs/restore-test.md`](docs/restore-test.md).
+
 ### Note on volumes
 
 The important data lives in two named Docker volumes:
