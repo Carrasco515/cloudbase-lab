@@ -52,6 +52,10 @@ docker compose logs -f
 
 ## Management
 
+> 📖 For a full day-to-day runbook (start/stop, logs, Traefik routes, local
+> hostnames, per-service checks, backups, the backup timer, the Watchtower
+> update strategy and security notes) see [`docs/operations.md`](docs/operations.md).
+
 ### Start
 ```bash
 docker compose up -d
@@ -251,7 +255,7 @@ uptime monitoring at http://localhost:8083. On first start it asks you to create
 an admin account, then you add monitors yourself.
 
 Because Uptime Kuma runs on the same `cloudbase_network`, it can reach the other
-services **by container name** — no host ports needed. Suggested monitors:
+services **by container name** — no host ports needed. Quick-start monitors:
 
 | Monitor          | Type | Target                          |
 |------------------|------|---------------------------------|
@@ -260,6 +264,12 @@ services **by container name** — no host ports needed. Suggested monitors:
 | Adminer          | HTTP | `http://cloudbase-adminer:8080` |
 | MariaDB          | TCP  | `cloudbase-mariadb:3306`        |
 | Redis            | TCP  | `cloudbase-redis:6379`          |
+
+> 📋 **Full monitoring plan:** see [`docs/monitoring.md`](docs/monitoring.md) for
+> the recommended **HTTPS** monitors (the full Traefik + TLS path), the internal
+> container-name alternatives, and why MariaDB/Redis need TCP checks, container
+> healthchecks or exporters rather than HTTP. Set up monitors in the browser —
+> do not script the Uptime Kuma login or store its credentials in this repo.
 
 The monitor configuration is stored in the `cloudbase_uptimekuma_data` volume,
 so it survives restarts (and is **not** captured by the project-files backup —
