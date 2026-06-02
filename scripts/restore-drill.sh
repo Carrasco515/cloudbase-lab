@@ -91,7 +91,12 @@ assert_temp_name() {
 #  Cleanup (runs on EXIT / ERR / signal) — temp resources only
 # ============================================================
 CLEANED=false
-# shellcheck disable=SC2329  # invoked indirectly via the `trap` below
+# cleanup() is registered with `trap` below, so shellcheck's reachability
+# analysis cannot see that it is called. This produces false positives:
+# SC2317 ("unreachable") on shellcheck < 0.10 — e.g. the 0.9.0 shipped on
+# GitHub's ubuntu-latest runner — and SC2329 ("never invoked") on newer
+# versions. Both are silenced here; every other check stays strict.
+# shellcheck disable=SC2317,SC2329
 cleanup() {
   local rc=$?
   $CLEANED && return
