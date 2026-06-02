@@ -33,6 +33,7 @@ The direct `:808x` ports stay available for convenience.
 | [`docs/operations.md`](docs/operations.md) | Day-to-day runbook: start/stop, logs, routes, backups, timer, updates |
 | [`docs/monitoring.md`](docs/monitoring.md) | Recommended Uptime Kuma monitors and how to monitor MariaDB/Redis |
 | [`docs/restore-test.md`](docs/restore-test.md) | Safe, non-destructive backup verification and restore testing |
+| [`docs/restore-drill.md`](docs/restore-drill.md) | Isolated restore drill — actually imports the latest backup into throwaway resources |
 
 ---
 
@@ -232,6 +233,14 @@ touches production data or Docker volumes and never prints secrets:
 The full safe restore-test procedure (integrity checks, MariaDB/Nextcloud
 validation, temp-folder extraction, cleanup and a future isolated full-restore
 drill) is documented in [`docs/restore-test.md`](docs/restore-test.md).
+
+To go one step further and prove the backup actually **restores** — by importing
+it into a throwaway, isolated MariaDB container that never touches production —
+run the restore drill (see [`docs/restore-drill.md`](docs/restore-drill.md)):
+
+```bash
+./scripts/restore-drill.sh
+```
 
 ### Note on volumes
 

@@ -178,7 +178,16 @@ thing these procedures delete.)
 ## Future improvement: full restore into an isolated test stack
 
 A read-only check proves the archives are intact; a *full* restore drill proves
-they actually boot. To do that safely later, without touching production:
+they actually boot.
+
+> 🧪 An **automated, isolated restore drill** already exists:
+> [`scripts/restore-drill.sh`](../scripts/restore-drill.sh) imports the latest
+> backup into a throwaway MariaDB container and validates the archives without
+> touching production. See [`restore-drill.md`](restore-drill.md). The steps
+> below describe the further, manual *full-stack* DR test (booting Nextcloud
+> itself in an isolated stack).
+
+To do that safely later, without touching production:
 
 1. Copy the stack into a separate directory and give it its own
    **project name** and **volume names** (e.g. `COMPOSE_PROJECT_NAME=cbtest`,

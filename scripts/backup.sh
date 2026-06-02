@@ -165,12 +165,15 @@ cp "$PROJECT_DIR/.env.example"         "$FILES_DIR/"
 cp "$PROJECT_DIR/README.md"            "$FILES_DIR/"
 cp "$PROJECT_DIR/homepage/index.html"  "$FILES_DIR/homepage/"
 
-# scripts/restore-notes.md if present
-if [ -f "$PROJECT_DIR/scripts/restore-notes.md" ]; then
-  cp "$PROJECT_DIR/scripts/restore-notes.md" "$FILES_DIR/scripts/"
+# Back up the whole scripts/ directory so future restores include the
+# operational scripts themselves (backup.sh, verify-backup.sh,
+# restore-drill.sh, restore-notes.md, …). The scripts dir contains no
+# secrets — .env is excluded by default (see --include-env above).
+if [ -d "$PROJECT_DIR/scripts" ]; then
+  cp -a "$PROJECT_DIR/scripts/." "$FILES_DIR/scripts/"
 fi
 
-log_ok "Copied: docker-compose.yml, .env.example, README.md, homepage/index.html"
+log_ok "Copied: docker-compose.yml, .env.example, README.md, homepage/index.html, scripts/"
 
 # ---- .env optional ----
 if [ "$INCLUDE_ENV" = true ]; then

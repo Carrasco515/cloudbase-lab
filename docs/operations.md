@@ -144,7 +144,10 @@ account safely and for the security model. Vaultwarden is intentionally
 ```
 
 The backup dumps MariaDB, archives the Nextcloud volume and copies the project
-files into `backups/YYYY-MM-DD_HH-MM-SS/`. The stack must be running.
+files into `backups/YYYY-MM-DD_HH-MM-SS/`. The project files include
+`docker-compose.yml`, `.env.example`, `README.md`, `homepage/index.html` and the
+whole `scripts/` directory (so the operational scripts are restorable too). The
+stack must be running.
 
 ## Check backup timer
 
@@ -201,6 +204,15 @@ production data or volumes:
 The full procedure (gzip/tar integrity, safe MariaDB and Nextcloud validation,
 temp-folder extraction, cleanup, and a future isolated-restore drill) is
 documented in [`restore-test.md`](restore-test.md).
+
+For a stronger, **isolated restore drill** that actually imports the dump into a
+throwaway MariaDB container (never touching production), run:
+
+```bash
+./scripts/restore-drill.sh            # drill the latest backup
+```
+
+It is non-destructive and self-cleaning — see [`restore-drill.md`](restore-drill.md).
 
 ## Update strategy with Watchtower
 
