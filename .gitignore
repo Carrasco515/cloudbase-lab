@@ -5,6 +5,9 @@
 .env.save.*
 .env.bak
 .env.local
+*.env.local
+# Any editor/tool .save backup (may contain secrets)
+*.save
 
 # Backups (may contain passwords)
 backups/
