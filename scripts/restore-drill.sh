@@ -91,6 +91,7 @@ assert_temp_name() {
 #  Cleanup (runs on EXIT / ERR / signal) — temp resources only
 # ============================================================
 CLEANED=false
+# shellcheck disable=SC2329  # invoked indirectly via the `trap` below
 cleanup() {
   local rc=$?
   $CLEANED && return
@@ -99,24 +100,33 @@ cleanup() {
 
   if docker ps -a --format '{{.Names}}' 2>/dev/null | grep -qx "$TMP_DB_CONTAINER"; then
     assert_temp_name "$TMP_DB_CONTAINER" "container"
-    docker rm -f "$TMP_DB_CONTAINER" >/dev/null 2>&1 && log_ok "removed container $TMP_DB_CONTAINER" \
-      || log_warn "could not remove container $TMP_DB_CONTAINER"
+    if docker rm -f "$TMP_DB_CONTAINER" >/dev/null 2>&1; then
+      log_ok "removed container $TMP_DB_CONTAINER"
+    else
+      log_warn "could not remove container $TMP_DB_CONTAINER"
+    fi
   else
     log_info "no temp container to remove"
   fi
 
   if docker volume ls --format '{{.Name}}' 2>/dev/null | grep -qx "$TMP_DB_VOLUME"; then
     assert_temp_name "$TMP_DB_VOLUME" "volume"
-    docker volume rm "$TMP_DB_VOLUME" >/dev/null 2>&1 && log_ok "removed volume $TMP_DB_VOLUME" \
-      || log_warn "could not remove volume $TMP_DB_VOLUME (still in use?)"
+    if docker volume rm "$TMP_DB_VOLUME" >/dev/null 2>&1; then
+      log_ok "removed volume $TMP_DB_VOLUME"
+    else
+      log_warn "could not remove volume $TMP_DB_VOLUME (still in use?)"
+    fi
   else
     log_info "no temp volume to remove"
   fi
 
   if docker network ls --format '{{.Name}}' 2>/dev/null | grep -qx "$TMP_NETWORK"; then
     assert_temp_name "$TMP_NETWORK" "network"
-    docker network rm "$TMP_NETWORK" >/dev/null 2>&1 && log_ok "removed network $TMP_NETWORK" \
-      || log_warn "could not remove network $TMP_NETWORK"
+    if docker network rm "$TMP_NETWORK" >/dev/null 2>&1; then
+      log_ok "removed network $TMP_NETWORK"
+    else
+      log_warn "could not remove network $TMP_NETWORK"
+    fi
   else
     log_info "no temp network to remove"
   fi
@@ -153,15 +163,13 @@ if ! docker info >/dev/null 2>&1; then
 fi
 log_ok "Docker is available"
 
-# Refuse to run if a leftover temp resource from a previous run exists,
+# Refuse to run if a leftover temp container from a previous run exists,
 # unless we can safely reclaim it (it is, by name, a restore-test resource).
-for c in "$TMP_DB_CONTAINER"; do
-  if docker ps -a --format '{{.Names}}' | grep -qx "$c"; then
-    log_warn "Found leftover temp container '$c' — reclaiming it."
-    assert_temp_name "$c" "container"
-    docker rm -f "$c" >/dev/null 2>&1 || true
-  fi
-done
+if docker ps -a --format '{{.Names}}' | grep -qx "$TMP_DB_CONTAINER"; then
+  log_warn "Found leftover temp container '$TMP_DB_CONTAINER' — reclaiming it."
+  assert_temp_name "$TMP_DB_CONTAINER" "container"
+  docker rm -f "$TMP_DB_CONTAINER" >/dev/null 2>&1 || true
+fi
 
 # ============================================================
 #  STEP 1 — Locate the backup to drill
@@ -197,8 +205,16 @@ log_ok "mariadb_dump.sql.gz present  ($(du -h "$MARIADB_GZ" | cut -f1))"
 log_ok "nextcloud_data.tar.gz present ($(du -h "$NEXTCLOUD_TGZ" | cut -f1))"
 log_ok "project-files/ present"
 
-gzip -t "$MARIADB_GZ"    2>/dev/null && log_ok "gzip OK: mariadb_dump.sql.gz"    || { log_error "gzip CORRUPT: mariadb_dump.sql.gz"; exit 1; }
-gzip -t "$NEXTCLOUD_TGZ" 2>/dev/null && log_ok "gzip OK: nextcloud_data.tar.gz" || { log_error "gzip CORRUPT: nextcloud_data.tar.gz"; exit 1; }
+if gzip -t "$MARIADB_GZ" 2>/dev/null; then
+  log_ok "gzip OK: mariadb_dump.sql.gz"
+else
+  log_error "gzip CORRUPT: mariadb_dump.sql.gz"; exit 1
+fi
+if gzip -t "$NEXTCLOUD_TGZ" 2>/dev/null; then
+  log_ok "gzip OK: nextcloud_data.tar.gz"
+else
+  log_error "gzip CORRUPT: nextcloud_data.tar.gz"; exit 1
+fi
 
 # tar structural validation (read-only listing, no extraction)
 if tar -tzf "$NEXTCLOUD_TGZ" >/dev/null 2>&1; then
