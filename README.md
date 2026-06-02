@@ -25,6 +25,17 @@ The direct `:808x` ports stay available for convenience.
 
 ---
 
+## Documentation
+
+| Document | What it covers |
+|---|---|
+| [`docs/architecture.md`](docs/architecture.md) | Overview, components, network/storage/backup/monitoring flow, security & update strategy (with a diagram) |
+| [`docs/operations.md`](docs/operations.md) | Day-to-day runbook: start/stop, logs, routes, backups, timer, updates |
+| [`docs/monitoring.md`](docs/monitoring.md) | Recommended Uptime Kuma monitors and how to monitor MariaDB/Redis |
+| [`docs/restore-test.md`](docs/restore-test.md) | Safe, non-destructive backup verification and restore testing |
+
+---
+
 ## Requirements
 
 - [Docker](https://docs.docker.com/get-docker/) >= 24

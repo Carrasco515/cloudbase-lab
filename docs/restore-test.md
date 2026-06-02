@@ -34,6 +34,28 @@ It exits non-zero if anything fails and never writes outside `/tmp` (it does
 not write at all) or prints secrets. The manual steps below are what the script
 automates, in case you want to do them by hand.
 
+**What `verify-backup.sh` validates:**
+
+- the latest (or a given) backup folder is found,
+- the required artifacts exist (`mariadb_dump.sql.gz`, `nextcloud_data.tar.gz`,
+  `project-files/` with the expected files),
+- both `.gz` archives pass a `gzip -t` integrity check,
+- the MariaDB dump has a `Dump completed` marker (not truncated) and contains
+  table definitions,
+- the Nextcloud archive lists cleanly and contains the application
+  (`index.php`, `status.php`, `config/config.php`).
+
+**What it deliberately does *not* do:**
+
+- it does **not** extract anything into the project or into Docker volumes,
+- it does **not** import the dump or start any container,
+- it does **not** delete or modify backups,
+- it does **not** print secrets or private filenames.
+
+A passing run proves the backup is **intact and readable** — it is *not* a
+full restore. A real restore must be exercised in an isolated test environment
+(see "Future improvement" at the end), never against the live volumes.
+
 ---
 
 ## 1. Find the latest backup
