@@ -71,7 +71,7 @@ Backups are timestamped folders `backups/YYYY-MM-DD_HH-MM-SS/` containing:
 |---|---|
 | `mariadb_dump.sql.gz` | gzip-compressed `--all-databases` SQL dump |
 | `nextcloud_data.tar.gz` | tar.gz of the `cloudbase_nextcloud_data` volume (`/var/www/html`) |
-| `project-files/` | copies of `docker-compose.yml`, `.env.example`, `README.md`, `homepage/index.html`, `scripts/restore-notes.md` |
+| `project-files/` | copies of `docker-compose.yml`, `.env.example`, `README.md`, `homepage/index.html` and the whole `scripts/` directory |
 
 ## 2. Verify gzip files (integrity, no extraction)
 

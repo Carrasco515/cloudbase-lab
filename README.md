@@ -214,7 +214,7 @@ backups/
 |---|---|
 | `mariadb_dump.sql.gz` | Full MariaDB dump of all databases |
 | `nextcloud_data.tar.gz` | Nextcloud volume (files, configuration, apps) |
-| `project-files/` | docker-compose.yml, .env.example, README.md, homepage/ |
+| `project-files/` | docker-compose.yml, .env.example, README.md, homepage/, scripts/ |
 
 ### Restore
 
