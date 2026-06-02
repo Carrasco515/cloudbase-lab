@@ -2,7 +2,39 @@
 
 [![CI](https://github.com/Carrasco515/cloudbase-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Carrasco515/cloudbase-lab/actions/workflows/ci.yml)
 
-A local homelab based on Docker Compose.
+**CloudBase Lab** is a self-hosted homelab that runs a complete, production-style
+private-cloud stack on a single machine with Docker Compose. A Nextcloud cloud
+sits behind a Traefik reverse proxy with local HTTPS, backed by MariaDB and
+Redis, monitored with Uptime Kuma, managed through Portainer, secured with a
+Vaultwarden password manager, kept current by opt-in Watchtower updates, and
+protected by automated backups with a verification step and an isolated restore
+drill — all continuously validated by GitHub Actions CI.
+
+Everything runs locally; nothing is exposed to the internet by default.
+
+### Why I built it
+
+I built CloudBase Lab as a hands-on portfolio project to design, run and operate
+a realistic multi-service stack the way it would be done in production — reverse
+-proxy routing and TLS, persistent data, monitoring, backup and restore
+discipline, a safe update strategy, CI validation and operations documentation —
+on infrastructure I fully control end to end.
+
+## DevOps skills demonstrated
+
+| Area | Demonstrated through |
+|---|---|
+| **Containerisation & orchestration** | Multi-service `docker-compose.yml`, pinned image tags, healthchecks, dependency ordering |
+| **Reverse proxy, TLS & routing** | Traefik with Docker-label service discovery, HTTP→HTTPS redirect, per-service local hostnames |
+| **Networking** | Dedicated bridge network, pinned subnet, local-only port binding, trusted-proxy configuration |
+| **Persistent storage** | Named Docker volumes for stateful services (Nextcloud, MariaDB, Portainer, Uptime Kuma, Vaultwarden) |
+| **Backup automation** | `backup.sh` with timestamped backups, retention/pruning and a systemd timer |
+| **Restore validation** | Read-only `verify-backup.sh` and an isolated `restore-drill.sh` that re-imports into throwaway resources |
+| **Monitoring** | Uptime Kuma HTTP/TCP monitors across the internal network and the HTTPS path |
+| **Update strategy** | Watchtower with opt-in, label-based auto-updates (stateful services deliberately excluded) |
+| **CI / quality gates** | GitHub Actions: Compose validation + shell `bash -n`/`shellcheck`, no secrets, no deploy |
+| **Security hygiene** | No internet exposure, secrets only in a git-ignored `.env`, closed Vaultwarden signups, least-privilege Docker-socket access |
+| **Documentation as code** | Architecture, operations runbook, monitoring and restore docs versioned alongside the stack |
 
 ## Services
 
@@ -25,6 +57,24 @@ The direct `:808x` ports stay available for convenience.
 
 ---
 
+## Architecture
+
+A single Docker Compose project on one bridge network (`cloudbase_network`):
+
+- **Edge** — Traefik terminates HTTP/HTTPS on ports 80/443 and routes to each
+  service by hostname using Docker labels (plain HTTP is redirected to HTTPS).
+- **Application** — Nextcloud, with MariaDB as its database and Redis for
+  caching/locking; Adminer for database access; Homepage as the landing dashboard.
+- **Operations** — Uptime Kuma (monitoring), Portainer (Docker management),
+  Vaultwarden (password manager) and Watchtower (opt-in image updates).
+- **State & backups** — persistent data lives in named Docker volumes; the
+  backup script writes timestamped archives to `backups/`.
+
+See [`docs/architecture.md`](docs/architecture.md) for the full diagram and the
+network/storage/backup/monitoring flow.
+
+---
+
 ## Documentation
 
 | Document | What it covers |
@@ -34,6 +84,17 @@ The direct `:808x` ports stay available for convenience.
 | [`docs/monitoring.md`](docs/monitoring.md) | Recommended Uptime Kuma monitors and how to monitor MariaDB/Redis |
 | [`docs/restore-test.md`](docs/restore-test.md) | Safe, non-destructive backup verification and restore testing |
 | [`docs/restore-drill.md`](docs/restore-drill.md) | Isolated restore drill — actually imports the latest backup into throwaway resources |
+
+---
+
+## Screenshots
+
+> _Optional — screenshots can be added later under `docs/images/`._
+
+- Homepage dashboard
+- Uptime Kuma status page
+- Portainer dashboard
+- Traefik dashboard
 
 ---
 
