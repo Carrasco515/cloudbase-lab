@@ -1,5 +1,10 @@
 # Secrets
 .env
+# Local .env backups (e.g. nano's .env.save, editor copies) — never the example
+.env.save
+.env.save.*
+.env.bak
+.env.local
 
 # Backups (may contain passwords)
 backups/
