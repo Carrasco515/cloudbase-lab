@@ -34,13 +34,15 @@ When creating each monitor in Uptime Kuma:
   this option (or import the cert) — otherwise the monitor reports the cert as
   invalid even though the service is up.
 - **Hostname resolution:** the monitor runs from **inside** the
-  `cloudbase-uptime-kuma` container, which does **not** know the
-  `*.cloudbase.local` hostnames by default (those live in the host's
-  `/etc/hosts`). For the HTTPS monitors above to resolve, either:
-  - add the hostnames to the container — e.g. an `extra_hosts` entry in
-    `docker-compose.yml` mapping each `*.cloudbase.local` to the Traefik
-    container/gateway IP — or
-  - use the internal monitors below, which need no DNS or TLS handling.
+  `cloudbase-uptime-kuma` container, which does **not** know the host's
+  `/etc/hosts` entries for `*.cloudbase.local`. This is already handled: the
+  `uptime-kuma` service in `docker-compose.yml` carries an `extra_hosts` block
+  that maps each `*.cloudbase.local` hostname to `host-gateway`, so requests
+  reach the Docker host where Traefik listens (Traefik then routes by Host
+  header). All seven HTTPS targets return a healthy status from inside the
+  container. If you add a new Traefik hostname, add a matching `extra_hosts`
+  line. The internal monitors below remain an alternative that needs no DNS or
+  TLS handling.
 - **Expected status:** `200` for most; Nextcloud's `status.php` returns `200`
   with a JSON body, and the Traefik dashboard may require the local hostname.
 

@@ -159,6 +159,19 @@ services:
     restart: unless-stopped
     networks:
       - cloudbase
+    # Uptime Kuma runs inside the container and does not know the host's
+    # /etc/hosts entries for *.cloudbase.local. Map each Traefik hostname to the
+    # Docker host gateway so HTTPS monitors reach Traefik (which routes by Host
+    # header). The local cert is self-signed, so enable "Ignore TLS error" on
+    # each HTTPS monitor. See docs/monitoring.md.
+    extra_hosts:
+      - "homepage.${CLOUDBASE_DOMAIN:-cloudbase.local}:host-gateway"
+      - "nextcloud.${CLOUDBASE_DOMAIN:-cloudbase.local}:host-gateway"
+      - "adminer.${CLOUDBASE_DOMAIN:-cloudbase.local}:host-gateway"
+      - "traefik.${CLOUDBASE_DOMAIN:-cloudbase.local}:host-gateway"
+      - "portainer.${CLOUDBASE_DOMAIN:-cloudbase.local}:host-gateway"
+      - "vaultwarden.${CLOUDBASE_DOMAIN:-cloudbase.local}:host-gateway"
+      - "uptime.${CLOUDBASE_DOMAIN:-cloudbase.local}:host-gateway"
     healthcheck:
       test: ["CMD", "extra/healthcheck"]
       interval: 60s

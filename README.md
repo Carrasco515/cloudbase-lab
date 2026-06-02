@@ -271,6 +271,14 @@ services **by container name** — no host ports needed. Quick-start monitors:
 > healthchecks or exporters rather than HTTP. Set up monitors in the browser —
 > do not script the Uptime Kuma login or store its credentials in this repo.
 
+To monitor the `https://*.cloudbase.local` hostnames, the `uptime-kuma` service
+carries an `extra_hosts` block in `docker-compose.yml` that maps each Traefik
+hostname to `host-gateway`. The container has no access to the host's
+`/etc/hosts`, so without this it could not resolve those names; the mapping
+routes its requests to the Docker host where Traefik listens. Enable
+**"Ignore TLS error"** on each HTTPS monitor (the local certificate is
+self-signed). See [`docs/monitoring.md`](docs/monitoring.md) for details.
+
 The monitor configuration is stored in the `cloudbase_uptimekuma_data` volume,
 so it survives restarts (and is **not** captured by the project-files backup —
 it lives in the Docker volume).
