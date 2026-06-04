@@ -2,23 +2,31 @@
 
 [![CI](https://github.com/Carrasco515/cloudbase-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Carrasco515/cloudbase-lab/actions/workflows/ci.yml)
 
-**CloudBase Lab** is a self-hosted homelab that runs a complete, production-style
-private-cloud stack on a single machine with Docker Compose. A Nextcloud cloud
-sits behind a Traefik reverse proxy with local HTTPS, backed by MariaDB and
-Redis, monitored with Uptime Kuma, managed through Portainer, secured with a
-Vaultwarden password manager, kept current by opt-in Watchtower updates, and
-protected by automated backups with a verification step and an isolated restore
-drill — all continuously validated by GitHub Actions CI.
+> A DevOps **learning and portfolio project** — a self-hosted homelab I built to
+> practise running a real, multi-service stack end to end. It runs on one machine
+> and stays local by default.
+
+**CloudBase Lab** runs a complete private-cloud stack on a single machine with
+Docker Compose. A Nextcloud cloud sits behind a Traefik reverse proxy with local
+HTTPS, backed by MariaDB and Redis, monitored with Uptime Kuma, managed through
+Portainer, secured with a Vaultwarden password manager, kept current by opt-in
+Watchtower updates, and protected by automated backups with a verification step
+and an isolated restore drill — all continuously validated by GitHub Actions CI.
 
 Everything runs locally; nothing is exposed to the internet by default.
 
+**What it demonstrates:** containerisation with Docker Compose, reverse-proxy
+routing and TLS, monitoring, a backup-and-restore workflow I actually test, a
+safe update strategy and CI — see
+[DevOps skills demonstrated](#devops-skills-demonstrated) below.
+
 ### Why I built it
 
-I built CloudBase Lab as a hands-on portfolio project to design, run and operate
-a realistic multi-service stack the way it would be done in production — reverse
--proxy routing and TLS, persistent data, monitoring, backup and restore
-discipline, a safe update strategy, CI validation and operations documentation —
-on infrastructure I fully control end to end.
+I built CloudBase Lab to get hands-on experience designing, running and operating
+a realistic multi-service stack: reverse-proxy routing and TLS, persistent data,
+monitoring, a backup and restore routine, a safe update strategy, CI validation
+and operations documentation. It is where I practise the day-to-day work of a
+DevOps / Platform Engineering role on infrastructure I control end to end.
 
 ## DevOps skills demonstrated
 
