@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="708" height="721" viewBox="0 0 708 721" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="14px">
+<rect width="708" height="721" rx="10" fill="#0d1117"/>
+<rect width="708" height="36" rx="10" fill="#161b22"/>
+<rect y="26" width="708" height="10" fill="#161b22"/>
+<circle cx="22" cy="18" r="6" fill="#ff5f56"/>
+<circle cx="44" cy="18" r="6" fill="#ffbd2e"/>
+<circle cx="66" cy="18" r="6" fill="#27c93f"/>
+<text x="354" y="23" text-anchor="middle" fill="#8b949e">verify-backup.sh — read-only integrity check</text>
+<text x="18" y="66" xml:space="preserve"><tspan fill="#3fb950">$ </tspan><tspan fill="#58a6ff" font-weight="bold">./scripts/verify-backup.sh</tspan></text>
+<text x="18" y="87" xml:space="preserve" fill="#c9d1d9"></text>
+<text x="18" y="108" xml:space="preserve" fill="#8b949e">┌─ Locate backup ────────────────────────────────────────</text>
+<text x="18" y="129" xml:space="preserve" fill="#3fb950">[ OK ]   Verifying: ~/projects/cloudbase-lab/backups/2026-05-30_21-58-00</text>
+<text x="18" y="150" xml:space="preserve" fill="#c9d1d9"></text>
+<text x="18" y="171" xml:space="preserve" fill="#8b949e">┌─ Required files ────────────────────────────────────────</text>
+<text x="18" y="192" xml:space="preserve" fill="#3fb950">[ OK ]   present: mariadb_dump.sql.gz  (700K)</text>
+<text x="18" y="213" xml:space="preserve" fill="#3fb950">[ OK ]   present: nextcloud_data.tar.gz  (258M)</text>
+<text x="18" y="234" xml:space="preserve" fill="#3fb950">[ OK ]   present: project-files/</text>
+<text x="18" y="255" xml:space="preserve" fill="#3fb950">[ OK ]     project-files/docker-compose.yml</text>
+<text x="18" y="276" xml:space="preserve" fill="#3fb950">[ OK ]     project-files/.env.example</text>
+<text x="18" y="297" xml:space="preserve" fill="#3fb950">[ OK ]     project-files/README.md</text>
+<text x="18" y="318" xml:space="preserve" fill="#3fb950">[ OK ]     project-files/homepage/index.html</text>
+<text x="18" y="339" xml:space="preserve" fill="#c9d1d9"></text>
+<text x="18" y="360" xml:space="preserve" fill="#8b949e">┌─ gzip integrity (gzip -t) ────────────────────────────────────────</text>
+<text x="18" y="381" xml:space="preserve" fill="#3fb950">[ OK ]   gzip OK: mariadb_dump.sql.gz</text>
+<text x="18" y="402" xml:space="preserve" fill="#3fb950">[ OK ]   gzip OK: nextcloud_data.tar.gz</text>
+<text x="18" y="423" xml:space="preserve" fill="#c9d1d9"></text>
+<text x="18" y="444" xml:space="preserve" fill="#8b949e">┌─ Archive contents (read-only listing) ────────────────────────────────────────</text>
+<text x="18" y="465" xml:space="preserve" fill="#3fb950">[ OK ]   MariaDB dump has a &#x27;Dump completed&#x27; marker (not truncated)</text>
+<text x="18" y="486" xml:space="preserve" fill="#8b949e">[INFO]   MariaDB dump: 302 CREATE TABLE statement(s)</text>
+<text x="18" y="507" xml:space="preserve" fill="#3fb950">[ OK ]   Nextcloud archive lists cleanly: 28168 entr(y/ies)</text>
+<text x="18" y="528" xml:space="preserve" fill="#3fb950">[ OK ]     contains index.php</text>
+<text x="18" y="549" xml:space="preserve" fill="#3fb950">[ OK ]     contains status.php</text>
+<text x="18" y="570" xml:space="preserve" fill="#3fb950">[ OK ]     contains config/config.php</text>
+<text x="18" y="591" xml:space="preserve" fill="#c9d1d9"></text>
+<text x="18" y="612" xml:space="preserve" fill="#8b949e">┌─ Summary ────────────────────────────────────────</text>
+<text x="18" y="633" xml:space="preserve" fill="#3fb950">✔  All backup verification checks passed.</text>
+<text x="18" y="654" xml:space="preserve" fill="#c9d1d9">  Backup: ~/projects/cloudbase-lab/backups/2026-05-30_21-58-00</text>
+<text x="18" y="675" xml:space="preserve" fill="#c9d1d9">  This is a read-only integrity check, not a full restore.</text>
+<text x="18" y="696" xml:space="preserve" fill="#c9d1d9">  For a real restore drill see docs/restore-test.md.</text>
+</svg>

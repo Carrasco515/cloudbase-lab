@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="708" height="364" viewBox="0 0 708 364" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="14px">
+<rect width="708" height="364" rx="10" fill="#0d1117"/>
+<rect width="708" height="36" rx="10" fill="#161b22"/>
+<rect y="26" width="708" height="10" fill="#161b22"/>
+<circle cx="22" cy="18" r="6" fill="#ff5f56"/>
+<circle cx="44" cy="18" r="6" fill="#ffbd2e"/>
+<circle cx="66" cy="18" r="6" fill="#27c93f"/>
+<text x="354" y="23" text-anchor="middle" fill="#8b949e">docker compose config — validation</text>
+<text x="18" y="66" xml:space="preserve"><tspan fill="#3fb950">$ </tspan><tspan fill="#58a6ff" font-weight="bold">docker compose config --quiet &amp;&amp; echo &quot;compose file is valid&quot;</tspan></text>
+<text x="18" y="87" xml:space="preserve" fill="#3fb950">compose file is valid</text>
+<text x="18" y="108" xml:space="preserve" fill="#c9d1d9"></text>
+<text x="18" y="129" xml:space="preserve"><tspan fill="#3fb950">$ </tspan><tspan fill="#58a6ff" font-weight="bold">docker compose config --services</tspan></text>
+<text x="18" y="150" xml:space="preserve" fill="#c9d1d9">homepage</text>
+<text x="18" y="171" xml:space="preserve" fill="#c9d1d9">mariadb</text>
+<text x="18" y="192" xml:space="preserve" fill="#c9d1d9">redis</text>
+<text x="18" y="213" xml:space="preserve" fill="#c9d1d9">nextcloud</text>
+<text x="18" y="234" xml:space="preserve" fill="#c9d1d9">portainer</text>
+<text x="18" y="255" xml:space="preserve" fill="#c9d1d9">traefik</text>
+<text x="18" y="276" xml:space="preserve" fill="#c9d1d9">watchtower</text>
+<text x="18" y="297" xml:space="preserve" fill="#c9d1d9">adminer</text>
+<text x="18" y="318" xml:space="preserve" fill="#c9d1d9">uptime-kuma</text>
+<text x="18" y="339" xml:space="preserve" fill="#c9d1d9">vaultwarden</text>
+</svg>

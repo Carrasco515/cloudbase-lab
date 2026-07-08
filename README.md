@@ -125,9 +125,16 @@ cloudbase-lab/
 
 ## Screenshots
 
-Screenshots live under `docs/images/` — see [`docs/screenshots.md`](docs/screenshots.md)
-for the capture plan (Homepage dashboard, Uptime Kuma status page, Traefik
-dashboard, Portainer, Nextcloud behind HTTPS).
+Real command output from this repository, rendered as terminal-style SVGs —
+see [`docs/screenshots.md`](docs/screenshots.md) for how they are made and
+which UI screenshots (Homepage, Uptime Kuma, Traefik, Portainer, Nextcloud)
+are still pending manual capture.
+
+![Backup verification — read-only integrity check, all checks passed](docs/images/backup-check.svg)
+
+![docker compose config — file valid, all 10 services listed](docs/images/docker-compose-config.svg)
+
+![Local CI checks — shell syntax and compose validation](docs/images/ci-check.svg)
 
 ---
 
