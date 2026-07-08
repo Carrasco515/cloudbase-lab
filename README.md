@@ -28,6 +28,13 @@ monitoring, a backup and restore routine, a safe update strategy, CI validation
 and operations documentation. It is where I practise the day-to-day work of a
 DevOps / Platform Engineering role on infrastructure I control end to end.
 
+## Tech stack
+
+**Linux** · **Docker & Docker Compose** · **Traefik v3** (reverse proxy, local HTTPS) ·
+**Nextcloud** · **MariaDB** · **Redis** · **Adminer** · **Uptime Kuma** ·
+**Portainer** · **Vaultwarden** · **Watchtower** · **Bash** · **systemd timers** ·
+**GitHub Actions**
+
 ## DevOps skills demonstrated
 
 | Area | Demonstrated through |
@@ -83,6 +90,25 @@ network/storage/backup/monitoring flow.
 
 ---
 
+## Project structure
+
+```text
+cloudbase-lab/
+├── docker-compose.yml         # The whole stack: 10 services, one network
+├── .env.example               # Configuration template (placeholders only)
+├── homepage/                  # Static landing page served by nginx
+├── scripts/
+│   ├── backup.sh              # Timestamped backups with retention/pruning
+│   ├── verify-backup.sh       # Read-only backup integrity check
+│   ├── restore-drill.sh       # Isolated restore into throwaway resources
+│   └── restore-notes.md       # Manual restore runbook
+├── systemd/                   # User-scoped service + timer (daily backup, 03:00)
+├── docs/                      # Architecture, operations, monitoring, restore docs
+└── .github/workflows/ci.yml   # Read-only validation on every push / PR
+```
+
+---
+
 ## Documentation
 
 | Document | What it covers |
@@ -92,17 +118,16 @@ network/storage/backup/monitoring flow.
 | [`docs/monitoring.md`](docs/monitoring.md) | Recommended Uptime Kuma monitors and how to monitor MariaDB/Redis |
 | [`docs/restore-test.md`](docs/restore-test.md) | Safe, non-destructive backup verification and restore testing |
 | [`docs/restore-drill.md`](docs/restore-drill.md) | Isolated restore drill — actually imports the latest backup into throwaway resources |
+| [`docs/troubleshooting.md`](docs/troubleshooting.md) | Common problems and how to diagnose/fix them |
+| [`docs/screenshots.md`](docs/screenshots.md) | Screenshot plan and gallery (work in progress) |
 
 ---
 
 ## Screenshots
 
-> _Optional — screenshots can be added later under `docs/images/`._
-
-- Homepage dashboard
-- Uptime Kuma status page
-- Portainer dashboard
-- Traefik dashboard
+Screenshots live under `docs/images/` — see [`docs/screenshots.md`](docs/screenshots.md)
+for the capture plan (Homepage dashboard, Uptime Kuma status page, Traefik
+dashboard, Portainer, Nextcloud behind HTTPS).
 
 ---
 
